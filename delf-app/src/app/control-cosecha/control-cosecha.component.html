@@ -1,0 +1,116 @@
+
+<div class="d-flex justify-content-end p-3 bg-info" style="color: white;">
+    <mat-icon>person_pin_circle</mat-icon> {{data_head | titlecase }}
+ </div>
+
+<div class="conts table-responsive container-fluid p-0">
+   <div class="container-fluid d-flex p-0"  >
+        <div class="bg-dark text-light d-flex align-items-center justify-content-center" style="height: 50px;" >
+            <strong>Tienes <span class="text-info" style="font-size: 19pt;" >{{cantidadLote}}</span> , enfundado(s).</strong>
+        </div>
+       <mat-form-field class="example-full-width w-100" appearance="fill">
+
+           <mat-label> <mat-icon>qr_code_scanner</mat-icon> Cod. Lote</mat-label>           
+           <input matInput
+                  placeholder="cod_lote_00000001"
+                  [(ngModel)]="_codec_in"
+                  (keyup.enter)="getLotes(_codec_in)">
+
+       </mat-form-field>
+
+       <div style="width: 120px; height: 50px; display: flex; justify-content: center; align-items: center; background-color: rgb(74, 157, 235);">
+            <div class="nshow"> {{ _cantidad }} </div>
+            <span class="notes text-light"> / <strong> {{cantidadLote}} </strong> </span>
+       </div>
+
+   </div>
+
+   <section class="p-2 mt-2" >
+
+    <div class="d-flex justify-content-between align-items-start flex-wrap">
+
+        <div class="d-flex">
+            <div class="color-selected" [ngStyle]="{'background-color':  _color_sel}" ></div>
+            <mat-form-field appearance="fill">
+                <mat-label>    
+                      Semana:
+                </mat-label>
+                <mat-select>
+                  <!-- Debo traer las semanas
+                       del calendario del banano Module -->
+                  <mat-option value="one" *ngFor="let jj of arrDp08acal">
+                    <div class="d-flex align-items-center justify-content-between"
+                         (click)="asignData(jj.color_asign, 'sem:' + jj.sema + '/' + 'peri:' + jj.peri + '/' + 'anio:' + jj.anio )">
+                        <div style="width: 10px; height: 10px;" [ngStyle]="{'background-color': jj.color_asign}">
+                          </div> Sem: {{jj.sema}} / {{jj.peri}} / {{jj.anio}}
+                    </div>
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="hacienda-selected">
+            <mat-form-field appearance="fill">
+                <mat-label>
+                    Hacienda:
+                </mat-label>
+                <mat-select>
+                  <!-- Debo traer las haciendas
+                       del contrl de haciendas Module -->
+                  <mat-option value="one" *ngFor="let xx of ArrHaciendas" (click)="getHacienda( xx.nombre, xx.nomtag )" >
+                      {{xx.nombre}} / {{xx.nomtag}}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+    <!--<div class="ncorte d-flex flex-column">
+            <mat-label>
+               Cortes:
+            </mat-label>
+            <mat-slider thumbLabel
+                        [displayWith]="formatLabel"
+                        tickInterval="6"
+                        step="1"
+                        min="0"
+                        max="6"
+                        aria-label="units" [(ngModel)]="_value_cortes"></mat-slider>
+        </div> -->        
+
+    </div>
+
+    <button class="btn btn-warning"
+        (click)="sscosecha( _value_cortes, _semana, _color_sel, naHacienda, _hacienda )" >
+        <mat-icon>save</mat-icon> Guardar
+    </button>
+
+
+    <div class="table-responsive"    style="height: 50vh; overflow: auto;">
+        <table class="table align-middle table-primary table-sm">
+            
+            <thead class="text-light bg-primary" >
+                <td>color</td>
+                <td>Fecha</td>
+                <td>Hacienda</td>
+                <td>semana</td>
+                <td>cortes</td>
+                <td><mat-icon style="background-color: transparent;">delete</mat-icon></td>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let xx of arrCosecha">
+                    <td [ngStyle]="{'background-color': xx.color}"></td>
+                    <td>{{xx.f_cosecha | date: 'short'}}</td>
+                    <td>{{xx.hacienda}} / COD.: {{xx.cod_hacienda}}</td>
+                    <td>{{xx.semana}}</td>
+                    <td>{{xx.cortes}}</td>
+                    <td (click)="ddcosecha(xx.id)"><mat-icon>delete</mat-icon></td>
+                </tr>            
+            </tbody>
+            
+        </table>
+    </div>
+
+    </section>
+
+</div>

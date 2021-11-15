@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 //#region Angular Material
 import {A11yModule} from '@angular/cdk/a11y';
 import {DragDropModule} from '@angular/cdk/drag-drop';
@@ -55,20 +55,39 @@ import { AppRoutingModule } from './app-routing.module';
 import { VersionamientoComponent } from './versionamiento/versionamiento.component';
 import { ConfcoloresComponent } from './confcolores/confcolores.component';
 import { DashComponent } from './dash/dash.component';
-
+import { CalbanComponent } from './calban/calban.component';
+import { HaciendasComponent } from './haciendas/haciendas.component';
+import { CreateCodeBarComponent } from './create-code-bar/create-code-bar.component';
+import { BarcodeGeneratorAllModule,QRCodeGeneratorAllModule,DataMatrixGeneratorAllModule } from '@syncfusion/ej2-angular-barcode-generator';
+import { HeaderComponent } from './header/header.component';
+import { AuditoriaComponent } from './auditoria/auditoria.component';
+import { DevolsobrComponent } from './devolsobr/devolsobr.component';
+import { RecusadosComponent } from './recusados/recusados.component';
+import { ControlCosechaComponent } from './control-cosecha/control-cosecha.component';
+import { environment } from '../environments/environment';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 //#endregion
-
-
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     VersionamientoComponent,
     ConfcoloresComponent,
-    DashComponent
+    DashComponent,
+    CalbanComponent,
+    HaciendasComponent,
+    CreateCodeBarComponent,
+    HeaderComponent,
+    AuditoriaComponent,
+    DevolsobrComponent,
+    RecusadosComponent,
+    ControlCosechaComponent
   ],
+  
   imports: [
+    NgxPaginationModule,
+    BrowserModule, BarcodeGeneratorAllModule, QRCodeGeneratorAllModule ,DataMatrixGeneratorAllModule,
     //#region 
     CdkStepperModule,
     CdkTableModule,
@@ -118,15 +137,28 @@ import { DashComponent } from './dash/dash.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot([
-      { path: 'water_drop', component: ConfcoloresComponent },
-      { path: 'dash',       component: DashComponent },
-      { path: 'login',      component: LoginComponent, pathMatch: 'full' },
-      { path: '**',         pathMatch: 'full', redirectTo: 'login' }
+    RouterModule.forRoot([   
+      { path: 'spa',          component: ControlCosechaComponent },
+      { path: 'error_outline',component: RecusadosComponent },
+      { path: 'rule',         component: DevolsobrComponent },
+      { path: 'gpp_good',     component: AuditoriaComponent },
+      { path: 'receipt_long', component: CreateCodeBarComponent },
+      { path: 'date_range',   component: CalbanComponent },
+      { path: 'water_drop',   component: ConfcoloresComponent },
+      { path: 'dash',         component: DashComponent },
+      { path: 'wb_shade',     component: HaciendasComponent },
+      { path: 'login',        component: LoginComponent, pathMatch: 'full' },
+      { path: '**',           pathMatch: 'full', redirectTo: 'login' }
     ]),
-    BrowserAnimationsModule
+
+    BrowserAnimationsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+
   ],
-  providers: [],
+
+  providers: [], 
   bootstrap: [AppComponent]
+
 })
+
 export class AppModule { }

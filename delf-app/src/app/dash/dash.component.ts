@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AnimapacketsService } from '../services/animapackets.service';
 import { ControlModulesService } from '../services/control-modules.service';
+import { TimeService } from '../services/time.service';
 
 @Component({
   selector: 'app-dash',
@@ -9,14 +10,16 @@ import { ControlModulesService } from '../services/control-modules.service';
   styleUrls: ['./dash.component.css']
 })
 export class DashComponent implements OnInit {
-
  
-  constructor( public mods: ControlModulesService,   
+  constructor( 
+    public mods: ControlModulesService,   
     public an: AnimapacketsService,
+    public dt: TimeService,
     private router: Router) { }
 
-public modsArr: any = [];
-public user: any;
+    public modsArr: any = [];
+    public user: any;
+
   ngOnInit() {
     this.gMods();    
     this.user = sessionStorage.getItem('User_Name');        
@@ -30,26 +33,22 @@ public user: any;
       for( let i = 0; i<=this.modsArr.length; i++ )
       {
         this.an.objectAnim( i, this.modsArr[i].id, 'enteranim ease 1.5s 1', 100 );
-
-        // document.getElementById( `${this.modsArr[i].id}` ).addEventListener( 'click', () => {
-        //   this.relink(this.modsArr[i].color_module);
-        // })
-
       }
     })
   }
 
-  relink(link: string, id: any) {
-    // for( let i = 0; i<=this.modsArr.length; i++ ) {
-      
-    // }
+  relink(link: string, id: any, name: string) {
 
+    this.dt.timeSetformatSQL(link, 'init');
+
+    localStorage.setItem(`name_module`, name);
     this.an.objectAnim( 1, id, 'outanim ease 1.5s 1', 100)
-
+    console.log(link);
+    
     setTimeout(() => {
       this.router.navigate([`/${link}`]);
     }, 1000);
-    //console.log(link)
+  
   }
 
 

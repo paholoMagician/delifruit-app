@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-end p-3 bg-info" style="color: white;">
+    <mat-icon>person_pin_circle</mat-icon> {{data_head | titlecase }}
+</div>
+
+<div class="conts table-responsive container-fluid">
+    <div class="container-fluid m-3" >
+        <mat-form-field class="example-full-width w-100" appearance="fill" >
+            <mat-label> <mat-icon>qr_code_scanner</mat-icon> Cod. Lote</mat-label>
+            
+            <input matInput
+                   placeholder="cod_lote_00000001"
+                   [(ngModel)]="_codec_in"
+                   (keyup.enter)="getLotes(_codec_in)">
+
+        </mat-form-field>
+    </div>
+
+
+    <div class="container-fluid d-flex justify-content-center">
+
+        <div  *ngIf="_product" >
+            <div class="card" style="width: 18rem;" *ngFor="let x of arrLotes">
+                <div class="card-body">
+                  <h5 class="card-title">Cantidad: {{ x.cantidad }}</h5>
+                </div>
+              </div>
+              <select class="form-select" aria-label="Default select example">
+                <option selected>Opciones recusados:</option>
+                <option value="2">Robado</option>
+                <option value="3">Perdidos</option>
+                <option value="4">Dañados</option>
+              </select>
+
+              <div class="mt-2 mb-2">
+                  <label for=""> Número: </label>
+                  <input class="form-control" type="number" >
+              </div>
+              <div class="mb-2">
+                  <button class="btn btn-success">
+                      Reportar
+                  </button>
+              </div>
+        </div>
+    
+    </div>
+
+</div>

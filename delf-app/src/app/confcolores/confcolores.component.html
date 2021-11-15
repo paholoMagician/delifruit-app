@@ -1,3 +1,9 @@
+
+<div class="d-flex justify-content-end p-3 bg-info" style="color: white;">
+    <mat-icon>person_pin_circle</mat-icon> {{data_head | titlecase }}
+ </div>
+
+
 <div class="conts table-responsive container-fluid">
     <div id="inptsSettings" class="d-flex justify-content-between align-items-center">
 
@@ -15,25 +21,25 @@
         <thead class="table-primary" >
             <th>Color</th>
             <th>Valor</th>
-            <th>
+            <!-- <th>
                 <mat-icon style="background-color: transparent;">edit</mat-icon>
-            </th>
+            </th> -->
             <th>
                 <mat-icon style="background-color: transparent;">delete</mat-icon>
             </th>
         </thead>
-        <tbody>
+        <tbody *ngFor=" let x of arrGcolor" >
             <tr>
-                <td>
-                    <!-- {{x.colorvalue}} -->
+                <td [ngStyle]="{'background-color': x.hex_cod_color}">
+                    
                 </td>
                 <td>
-                    <!-- {{x.value}} -->
+                    {{x.name_labor}}
                 </td>
-                <td>
+                <!-- <td>
                     <mat-icon>edit</mat-icon>
-                </td>
-                <td>
+                </td> -->
+                <td (click)="dcolor(x.s_codec)" >
                     <mat-icon>delete</mat-icon>
                 </td>
             </tr>

@@ -1,0 +1,13 @@
+.color-selected {
+    width: 25px;
+    height: 52.03px;
+    border: dashed 1px gray;
+}
+
+.nshow {
+    font-size: 25pt;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    color: whitesmoke;
+}

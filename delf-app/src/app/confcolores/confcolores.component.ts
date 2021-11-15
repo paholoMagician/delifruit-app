@@ -11,11 +11,20 @@ export class ConfcoloresComponent implements OnInit {
 
   public _valor: string = '';
   public _color: string = '';
+  public data_head: any;
 
   constructor(public smas: ConfcolorsService) { }
 
   ngOnInit(): void {
+    this.gcolor();
+    this.ghead();
   }
+
+
+  ghead() {
+    this.data_head = localStorage.getItem('name_module');
+  }
+
 
   public arrmaster: any = [];
   public count: number = 0;
@@ -46,45 +55,38 @@ export class ConfcoloresComponent implements OnInit {
 
   salpmaster(color: string, value: string) {
 
-    // let xx: any = localStorage.getItem('count-secuence');
-    // let y: string= '00';
-    // if(xx.length < 2) {
-    //   console.log('length es menor a 1')
-    //   y = '00' + xx
-    //   console.log( y );
-    // }
-
-    // else if ( xx.length == 2) {
-    //   y = '0' + xx
-    //   console.log( y );
-    // }
-
-    // else {
-    //   y; 
-    // }
-
     this.arrmaster = {
-      master : "conf_color",
-      codigo : `${localStorage.getItem('count-secuence')}`,
-      nombre : value,
-      valor  : "",
-      nomtag : "",
-      gestion: "",
-      pideval: "",
-      campo1 : color,
-      grupo  : "",
-      sgrupo : "",
-      campo2 : "",
-      lencod : ""
+      hex_cod_color : color,
+      name_labor    : value,
+      descrip_labor : 'conf_color',
+      s_codec: `${localStorage.getItem('count-secuence')}`
     }
 
     console.log( this.arrmaster );
 
-    this.smas.confalpMaster(this.arrmaster).subscribe( x => {
+    this.smas.conf_code_color(this.arrmaster).subscribe( x => {
+      console.log('Bien!!')
       console.log(x);
+
+      this.gcolor();
+
+    }, () => {
+      console.warn('MAl!')
     })
 
   }
 
+  public arrGcolor: any = [];
+  gcolor() {
+    this.smas.gecolor('conf_color').subscribe( color => {
+      this.arrGcolor = color;
+    })
+  }
 
+
+  dcolor( np: string ) {
+    this.smas.decolor('conf_color', np).subscribe( x => {
+      this.gcolor();
+    })
+  }
 }

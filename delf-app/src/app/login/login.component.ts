@@ -6,7 +6,7 @@ import Swal from 'sweetalert2'
 import { LoginService } from '../services/login.service';
 import { ValidationsHttpService } from '../services/validations-http.service';
 
-@Component({
+  @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -57,15 +57,23 @@ export class LoginComponent implements OnInit {
       WebPass: b
     }
 
-    // console.log(arrLog);
+    console.log(arrLog);
     this.userService.login(arrLog).subscribe( x => {
-      this.arrLogin = x;
-      console.log(this.arrLogin);
-      // let name =  this.arrLogin.nombre;
-      // let estado =  this.arrLogin.estado;
-      sessionStorage.setItem('User_Name', a);
-      sessionStorage.setItem('Estado', b);
-      this.verificacion();      
+      this.arrLogin = x;      
+      
+      // console.log(this.arrLogin)
+
+      let name     = this.arrLogin.webUsu;
+      let estado   = this.arrLogin.tipoMu;
+      let CodeUser = this.arrLogin.codeUser;
+      
+      console.log(name + ' : ' + estado + ' : ' + CodeUser);
+      
+      sessionStorage.setItem('User_Name', name);
+      sessionStorage.setItem('Estado', estado);
+      sessionStorage.setItem('Code_user', CodeUser);
+
+      this.verificacion();
       this.router.navigate(['/dash']);
 
       Swal.fire({
