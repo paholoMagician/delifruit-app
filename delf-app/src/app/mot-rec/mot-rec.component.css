@@ -1,0 +1,78 @@
+.container{
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    background-color: rgb(231, 231, 231);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.indicator{
+    width: 100%;
+}
+.form{
+    margin: 60px;
+    padding: 30px;
+    border-radius: 5px;
+    width: 80%;
+    background-color: rgb(255, 255, 255)
+}
+.title{
+    font-size: 18px;
+    color: #333333;
+    font-weight: 500;
+}
+.formint{
+    margin-top: 5px;
+    width: 100;
+}
+.finput{
+    margin-top: 6px;
+    width: 100%;
+}
+.input{
+    width: 100%;
+}
+
+.form{
+    margin: 20px;
+    padding: 30px;
+    border-radius: 5px;
+    width: 80%;
+    background-color: rgb(255, 255, 255)
+}
+.accordion{
+    width: 80%;
+}
+.expansion{
+    width: 100%;
+}
+.buttoms{
+    margin: 9px 0px;
+    width: 100%;
+    background-color: rgb(31, 31, 31);
+    color: white;
+}
+.tablet{
+    width: 100%;
+    height: auto;
+}
+.trtable{
+    height: 50px;
+    border-bottom: 1px solid rgb(180, 180, 180);
+    text-align: center;
+}
+.tr2table{
+    height: 50px;
+    text-align: center;
+}
+.tdtabletnum{
+    text-align: center;
+}
+.tdtablet{
+    text-align: center;
+}
+.material-icons{
+ font-size: 20px;
+ opacity: 0.6;
+}
