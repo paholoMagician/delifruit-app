@@ -128,38 +128,36 @@
     <div class="d-flex align-items-center justify-content-center flex-wrap">
         <div id="codePrepare" class="container-fluid d-flex justify-content-center">
           
-          <!-- <div class="d-flex">
+          <div class="d-flex">
             <div class="color-selected" [ngStyle]="{'background-color': _color_sel}" ></div>
             <mat-form-field appearance="fill">
                 <mat-label>
                     Semana:
                 </mat-label>
                 <mat-select>
+
+                  <!-- [ngStyle]="{'background-color': jj.color_asign}" -->
+                  <!-- (click)="asignData(jj.color_asign, 'sem:' + jj.sema + '/' + 'peri:' + jj.peri + '/' + 'anio:' + jj.anio )" -->
                   <mat-option value="one" *ngFor="let jj of arrDp08acal">
-                    <div class="d-flex align-items-center justify-content-between" (click)="asignData(jj.color_asign, 'sem:' + jj.sema + '/' + 'peri:' + jj.peri + '/' + 'anio:' + jj.anio )">
-                        <div style="width: 10px; height: 10px;" [ngStyle]="{'background-color': jj.color_asign}" ></div> Sem: {{jj.sema}} / {{jj.peri}} / {{jj.anio}}
+                    <div class="d-flex align-items-center justify-content-between"
+                         (click)="asignData(jj.color_asign, 'sem:' + jj.sema + '/' + 'peri:' + jj.peri + '/' + 'anio:' + jj.anio )">
+                        <div style="width: 10px; height: 10px;" [ngStyle]="{'background-color': jj.color_asign}"></div> Sem: {{jj.sema}} / {{jj.peri}} / {{jj.anio}}
                     </div>
                   </mat-option>
                 </mat-select>
             </mat-form-field>
-          </div> -->
-
+          </div>
           <div data-bs-toggle="modal"
                data-bs-target="#exampleModal2"
                class="code rounded-start d-flex justify-content-center align-items-center text-center">
                {{_hacienda}}
           </div>
-
           <div data-bs-toggle="modal"
                data-bs-target="#exampleModal3"
-               class="code  d-flex justify-content-center align-items-center">
+               class="code d-flex justify-content-center align-items-center">
                {{_lote}}
           </div>
-
-          <div class="year  d-flex justify-content-center align-items-center">
-            {{year}}
-          </div>
-
+          <div class="year  d-flex justify-content-center align-items-center">{{year}}</div>
           <div class="code  d-flex rounded-end justify-content-center align-items-center">
             <input type="number" class="form-control" [(ngModel)]="_secuencia" (keyup)="getDataTables( 'codigo_sec_bcod', _secuencia, 3, '' )">
           </div>
@@ -212,7 +210,8 @@
     </div>
 
     <div class="d-flex justify-content-center m-2" >
-      <div class="numb d-flex align-items-center">
+      <div class="numb d-flex align-items-center" >
+
         P. Act.:
         <input type="number"
                style="width: 60px;"
@@ -221,8 +220,10 @@
                name="_nPageCont"
                id="pID" (change)="shist(_nPageCont)"
                (keyup.enter)="shist(_nPageCont)" >
-      </div>      
+      </div>
+
       <div class="numb d-flex align-items-center">
+
         Cant. Pag.:
         <input type="number"
                style="width: 60px;"
@@ -232,6 +233,7 @@
                (change)="shistPerPage(_perPage)"
                (keyup.enter)="shistPerPage(_perPage)">
       </div>
+
     </div>
 
     <div class="paginador d-flex flex-column text-secondary align-items-center m-2 border-secondary">
@@ -239,21 +241,26 @@
     </div>
 
   </div>
+
     <hr>
     <!-- <div id="qr"></div> -->
-    <div class="qr mt-3 container-fluid d-flex justify-content-between flex-wrap" id="dataQR">
-      <div class="etiqueta d-flex" *ngFor="let qr of arrAuditFilter | paginate: { itemsPerPage: _perPage, currentPage: _nPageCont }" >
-        <div [id]="qr.id" >
+    <div class="qr mt-3 container-fluid d-flex justify-content-between" id="dataQR">
+      <div class="d-flex" *ngFor="let qr of arrAuditFilter | paginate: { itemsPerPage: _perPage, currentPage: _nPageCont }" [id]="qr.id"  >
+ 
             <!-- #DEL_H_001_20210001 -->
-            {{createQRO(qr.hacienda_tag, qr.id)}}
-        </div>
-        <div style="font-size: 7pt; font-family: Arial, Helvetica, sans-serif;">
-            COD: {{qr.hacienda_tag | slice:5:25}}
-        </div>
+            {{ createQRO(qr.hacienda_tag, qr.id, qr.name_labor) }}
+        
+        <!-- <div style="font-size: 7pt; font-family: Arial, Helvetica, sans-serif; padding: 2px; ">
+            COL.: {{ qr.name_labor   | uppercase  }}
+            <br>
+            COD.: {{ qr.hacienda_tag | slice:5:25 }}
+        </div> -->
       </div>
+      
       <!-- <div class="etiqueta d-flex" *ngFor="let qr of arrCode" >
         <div [id]="qr.secuence"></div>
         <div id="data-{{qr.secuence}}"></div>
       </div> -->
+
     </div>    
 </div>

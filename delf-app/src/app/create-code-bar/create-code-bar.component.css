@@ -20,14 +20,15 @@
     background-color: rgba(122, 230, 60, 0.534);
 }
 
-.etiqueta {
+/* .etiqueta {
     width: 150px;
     height: 50px;
-    /* background-color: rgb(174, 174, 174); */
+
+    
     padding: 5px;
     margin-top: 5px;
     border: solid 0.5px rgb(218, 218, 218);
-}
+} */
 
 .qr {
     height: 50vh;

@@ -93,7 +93,7 @@
                 <td>Fecha</td>
                 <td>Hacienda</td>
                 <td>semana</td>
-                <td>cortes</td>
+                <!-- <td>cortes</td> -->
                 <td><mat-icon style="background-color: transparent;">delete</mat-icon></td>
             </thead>
 
@@ -103,7 +103,7 @@
                     <td>{{xx.f_cosecha | date: 'short'}}</td>
                     <td>{{xx.hacienda}} / COD.: {{xx.cod_hacienda}}</td>
                     <td>{{xx.semana}}</td>
-                    <td>{{xx.cortes}}</td>
+                    <!-- <td>{{xx.cortes}}</td> -->
                     <td (click)="ddcosecha(xx.id)"><mat-icon>delete</mat-icon></td>
                 </tr>            
             </tbody>

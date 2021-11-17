@@ -66,6 +66,7 @@ import { RecusadosComponent } from './recusados/recusados.component';
 import { ControlCosechaComponent } from './control-cosecha/control-cosecha.component';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { InformesComponent } from './informes/informes.component';
 
 //#endregion
 @NgModule({
@@ -82,7 +83,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AuditoriaComponent,
     DevolsobrComponent,
     RecusadosComponent,
-    ControlCosechaComponent
+    ControlCosechaComponent,
+    InformesComponent
   ],
   
   imports: [
@@ -138,6 +140,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([   
+      { path: 'plagiarism',   component: InformesComponent },
       { path: 'spa',          component: ControlCosechaComponent },
       { path: 'error_outline',component: RecusadosComponent },
       { path: 'rule',         component: DevolsobrComponent },
@@ -150,7 +153,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       { path: 'login',        component: LoginComponent, pathMatch: 'full' },
       { path: '**',           pathMatch: 'full', redirectTo: 'login' }
     ]),
-
+    
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
 

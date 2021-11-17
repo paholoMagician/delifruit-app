@@ -26,7 +26,7 @@ export class CreateCodeBarComponent implements OnInit {
   public year: any = new Date().getFullYear();
   public arrDp08acal:  any = [];
   public arrFilterGet: any = [];
-  
+
   //var generator barcode
   public _hacienda: any = '';
   public _lote: any = '';
@@ -35,29 +35,29 @@ export class CreateCodeBarComponent implements OnInit {
   public data_head: any;
 
   public namHacienda: string = '';
- 
+
   public usx: any;
 
   public sesHiystPrint: any;
   public _nPageCont:    any;
 
-  constructor(  public dt: TimeService, 
+  constructor(  public dt: TimeService,
                 public smas: ConfcolorsService,
                 private gdp: Dp08acalService,
                 private alp: ALPTABLAService,
                 private audit: AuditPrintService, ) { }
-  
+
   ngOnInit(): void {
 
     this.gDP08ACAL('asc');
-    
-    
+
+
     this.sesHiystPrint = localStorage.getItem('hystPrint');
     this._nPageCont = localStorage.getItem('hystPrint');
-    
+
     this.codecSearch = localStorage.getItem('Codec_search');
     this.cantCod     = Number(localStorage.getItem('Cant_codec_search'));
-    
+
     // console.log( '================ Slice INI ================' );
     // console.log(          this.codecSearch.slice(0,15)         );
     // console.log( '================ Slice FIN ================' );
@@ -66,17 +66,17 @@ export class CreateCodeBarComponent implements OnInit {
     //   this.arrAuditFilter = m;
     //   console.log(this.arrAuditFilter)
     // })
-    
+
     ///console.log()
 
     this.usx = sessionStorage.getItem('User_Name');
     this.getAudit(this.usx, '_');
-    
+
     this.gDP08ACAL('ASC')
-    
+
     console.log('init')
     this.filter('','b')
-    
+
     this.namHacienda = 'DELI_MASTER';
 
     this.filter(this.namHacienda, 'a')
@@ -116,7 +116,7 @@ export class CreateCodeBarComponent implements OnInit {
 //  gDP08ACAL(order: string) {
 //    this.gdp.getDp08acal(order).subscribe( db => {
 //      this.arrDp08acal = db;
-//      console.log(this.arrDp08acal);   
+//      console.log(this.arrDp08acal);
 //    })
 //  }
 
@@ -127,7 +127,7 @@ export class CreateCodeBarComponent implements OnInit {
   getAuditImpress(a: string, cant: number) {
 
     // const xx = a.slice(1,15);
-    
+
     localStorage.setItem( 'Codec_search', a );
     localStorage.setItem( 'Cant_codec_search', cant.toString().trim() );
 
@@ -136,16 +136,16 @@ export class CreateCodeBarComponent implements OnInit {
 
     this.audit.getAuditPrint( '_void_', a ).subscribe( m => {
       this.arrAuditFilter = m;
-      console.log(this.arrAuditFilter)
+      console.log(this.arrAuditFilter);
     })
 
   }
 
   public arrAudit: any = [];
-
   saveAudit( username: string, finit: string, ffin: string, codec_lotes: string, haciendaTag:string, codecLoMaster: string, cant: number ) {
-    
-    this.arrAudit = {      
+
+    // const xcolor : any = localStorage.getItem('_color');
+    this.arrAudit = {
       user_name:          username,
       finit:              finit,
       ffin:               ffin,
@@ -153,10 +153,11 @@ export class CreateCodeBarComponent implements OnInit {
       hacienda_tag:       haciendaTag,
       codec_lotes_master: codecLoMaster,
       cantidad:           cant,
-      token_user:         sessionStorage.getItem('Code_user')
+      token_user:         sessionStorage.getItem('Code_user'),
+      codec_color:        localStorage.getItem('_color')
     }
 
-    console.log(this.arrAudit);
+    // console.log(xcolor);
 
     this.audit.saveAuditPrint(this.arrAudit).subscribe( y => {
       console.log('OK GUARDADO');
@@ -164,7 +165,7 @@ export class CreateCodeBarComponent implements OnInit {
     })
 
     this.getAudit(this.usx, '_');
-  
+
   }
 
  nhacienda(a:string) {
@@ -176,19 +177,29 @@ export class CreateCodeBarComponent implements OnInit {
   ghead() {
     this.data_head = localStorage.getItem('name_module');
   }
-  
+
   dataPersist( nameStorage: string, values: string ) {
     let x = localStorage.setItem( `${nameStorage}`, `${values}` )
   }
-   public _color_sel: string =  ''
+  
+  public _color_sel: string =  ''
   gDP08ACAL(order: string) {
     this.gdp.getDp08acal(order).subscribe( db => {
-      this.arrDp08acal = db; 
-       
-      console.log ( 'this.arrDp08acal'); 
+      this.arrDp08acal = db;
+
+      console.log ( 'this.arrDp08acal');
       console.log(this.arrDp08acal);
     })
-  }      
+  }
+
+  // jj.sema + '/' + jj.peri + '/' + jj.anio
+  public _semana: string = '';
+  asignData(color: string, semana: string) {
+    this._color_sel = color;
+    this._semana = semana;
+    localStorage.setItem('_color', color);
+    localStorage.setItem('_semana', this._semana);
+  }
 
   public arrHaciendas: any = [];
   public titleModal: string = '';
@@ -198,11 +209,9 @@ export class CreateCodeBarComponent implements OnInit {
     if( opt == 'a' ) {
       console.log('Buscando lotes');
       this.alp.getFilterHac(data, opt).subscribe( y => {
-        
         this.arrFilterGet = y;
         console.log(this.arrFilterGet);
         this.titleModal = this.arrFilterGet[0].db_msj;
-
       })
     }
 
@@ -211,13 +220,10 @@ export class CreateCodeBarComponent implements OnInit {
       console.log('Buscando haciendas');
       this.alp.getFilterHac('HCIE_GR', opt).subscribe( w =>
       {
-
         this.arrHaciendas = w;
         this.titleModal   = this.arrHaciendas[0].db_msj;
         console.log(this.arrHaciendas);
-
       })
-
     }
 
     //opcion c filtra una hacienda
@@ -232,8 +238,6 @@ export class CreateCodeBarComponent implements OnInit {
   }
 
   getDataTables( nameStore: string, a: string, opt: number, nhacienda: string ) {
-    // console.log('haci')
-
 
     switch( opt ) {
 
@@ -261,11 +265,11 @@ export class CreateCodeBarComponent implements OnInit {
         break;
 
     }
-  
+
   }
- 
+
   public arrCode: any = [];
-  generateBarcode(numberCode: number) {    
+  generateBarcode(numberCode: number) {
 
     this.dt.timeSetformatSQL( 'receipt_long', 'fin' );
 
@@ -275,60 +279,78 @@ export class CreateCodeBarComponent implements OnInit {
     const fx :  any = localStorage.getItem('audit_mod_receipt_long-init');
     const lot:  any = localStorage.getItem('codigo_lot_bcod');
     const htag: any = localStorage.getItem('codigo_hac_bcod')?.trim();
-    this.saveAudit( usx, fx, xx, lot, this.bar_codec + ':M', htag, numberCode )
 
+    this.saveAudit( usx, fx, xx, lot, this.bar_codec + ':M', htag, numberCode );
     console.log( usx, fx, xx, lot, this.bar_codec + ':M',  htag);
 
     for( let i = 1; i <= numberCode; i++ ) {
-      this.arrCode.push({ data:  localStorage.getItem('codigo_hac_bcod')?.trim()
-                          + '_' + this._lote.trim()   + '_' + this.year + (i).toString().padStart(4,'0'),
-                          secuence: this._lote.trim() + '_' + this.year + (i).toString().padStart(4,'0')
-      });
-      
 
-      console.log(this.arrCode);
+      this.arrCode.push({ data:  localStorage.getItem('codigo_hac_bcod')?.trim()
+       + '_' + this._lote.trim() + '_' + this.year + (i).toString().padStart(4,'0'),
+                          secuence: this._lote.trim() + '_' + this.year + (i).toString().padStart(4,'0')
+
+    });
+
+    console.log(this.arrCode);
 
     }
 
     for(let x = 0; x <= this.arrCode.length; x++) {
-      
+
       setTimeout(() => {
         this.arrCode[x].data;
         console.log(this.arrCode[x].data);
         let xx = <HTMLDivElement> document.getElementById(`${this.arrCode[x].secuence}`)
         let xy = <HTMLDivElement> document.getElementById(`data-${this.arrCode[x].secuence}`)
         console.log( xx )
-        
+
         this.saveAudit( '---', '', '', htag+'-'+lot, this.arrCode[x].data, '',  0 );
-        const qr = qrcode(3, 'Q');
-        const url = `${this.arrCode[x].data}`;
-        qr.addData(url);
-        qr.make();
         
-        xx.innerHTML = qr.createImgTag(2,4);
-        xy.innerHTML = `<span style="font-weight: bold; font-size: 7pt; font-family: arial; display: flex; align-items: center; padding: 5px;">
-        COD:<br>
-            ${this.arrCode[x].secuence}               
-        </span>`
-        const xz: any = localStorage.getItem('audit_mod_receipt_long-fin');
+        // const qr = qrcode(3, 'Q');
+        // const url = `${this.arrCode[x].data}`;
+        // qr.addData(url);
+        // qr.make();
+
+        // xx.innerHTML = qr.createImgTag(2,4);
+        // xy.innerHTML = `<span style="font-weight: bold; font-size: 7pt;
+        //                              font-family: arial; display: flex;
+        //                              align-items: center; padding: 5px;">
+        //                              COD:<br>${this.arrCode[x].secuence}
+        //                              </span>`;
+
+        // const xz: any = localStorage.getItem('audit_mod_receipt_long-fin');
 
       }, 300);
-      
+
     }
 
   }
 
-  createQRO(data: string, id: string) {
+  createQRO(data: string, id: string, color: string) {
 
     const xx  = <HTMLDivElement> document.getElementById(`${id}`);
-    const qr  = qrcode(2, 'L');
+    const qr  = qrcode(0, 'M');
     const url = `${data}`;
+
+    xx.style.width      = '200px';
+    xx.style.height     = '60px';
+    // xx.style.transformOrigin= '0 0'; 
+    xx.style.transform  = 'rotate(270deg)';
+    xx.style.display    = 'flex !important';
+   //xx.style.flexDirection    = 'column';
+    xx.style.fontFamily = 'arial';
+    // xx.style.marginLeft = '25px';
 
     qr.addData(url);
     qr.make();
 
-    xx.innerHTML = qr.createImgTag(1.4, 1);
-  
+    xx.innerHTML =  `<div>
+                       ${qr.createImgTag(1.4, 1)}
+                     </div>
+                     <div style='width:200px;'> 
+                       COL.: ${color}
+                     </div>  `;
+
   }
 
 

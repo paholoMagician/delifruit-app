@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
   public arrLogin: any = [];
   logeo( a: string ,b: string ) {
 
-    let arrLog: any = {
+    let arrLog: any = {      
       WebUsu:  a,
       WebPass: b
     }
@@ -95,9 +95,5 @@ export class LoginComponent implements OnInit {
     })
 
   }
-
- 
-
-
 
 }

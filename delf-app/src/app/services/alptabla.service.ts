@@ -56,7 +56,7 @@ export class ALPTABLAService {
   private arrDetMaster: any = [];
   saveDetailMaster(master: string, codecSecuence: string, nombre: string, grupo: string, hectareaje: number) {
 
-    this.arrDetMaster = {
+    this.arrDetMaster = {      
       master:  master,
       codigo:  codecSecuence,
       nombre:  nombre,
@@ -71,6 +71,8 @@ export class ALPTABLAService {
       lencod:  0.00
     }
 
+    console.log(this.arrDetMaster);
+
     return this.http.post( this.apiURL + '/control_alp_master_tabla/save_alp_master', this.arrDetMaster );
 
   }
@@ -78,6 +80,7 @@ export class ALPTABLAService {
   getMaster(nomtag: string, properties: string) {  
     return this.http.get( this.apiURL + '/control_alp_master_tabla/geMaster/' + nomtag + '/' + properties );
   }
+
   //control_alp_master_tabla/delMasterData/PRUE_MASTER/001
   delLotes(master: string, codec: string) {
     return this.http.get( this.apiURL + '/control_alp_master_tabla/delMasterData/' + master + '/' + codec);
