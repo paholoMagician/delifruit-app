@@ -34,6 +34,8 @@ export class DevolsobrComponent implements OnInit {
   public ArrDevos: any = [];
   sDevsobs( loteProd: string, finit: any, observ: string, cantidad: number, cantidadDev: number ) {
 
+    console.log(finit);
+
     this.ArrDevos = {
       lote_prod:  loteProd,
       finit:      finit,
@@ -53,18 +55,19 @@ export class DevolsobrComponent implements OnInit {
       console.log(y);
       this.getDevos();
     }, () => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'El Lote escaneado para devolución está repetido.',
-        footer: 'Si desea hacer un cambio, pruebe actualizando.'
-      })
+      console.log('Fallo');
+      // Swal.fire({
+      //   icon: 'error',
+      //   title: 'Oops...',
+      //   text: 'El Lote escaneado para devolución está repetido.',
+      //   footer: 'Si desea hacer un cambio, pruebe actualizando.'
+      // })
     })
   
   }
-
+  //|| a == null
   controlCant(a: number, b: number) {
-    if( a > b || a <= 0 || a == null) {
+    if( a > b || a < 0 ) {
       Swal.fire({
         icon: 'info',
         title: 'Oops...',

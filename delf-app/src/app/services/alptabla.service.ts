@@ -14,7 +14,6 @@ export class ALPTABLAService {
   constructor(private http: HttpClient, public router: Router) { }
 
   /*
-
     -----------------------------------------------------------------------------------------------------------------
     -master char(5)- | -codigo char(20)- | -nombre nvarchar(200)- | -valor decimal(15, 2)- | -nomtag char(10)- |
     -gestion char(3)- | -pideval bit- | -campo1 nvarchar(70)- | -grupo nvarchar(70)- | -sgrupo char(70)- |
@@ -22,15 +21,12 @@ export class ALPTABLAService {
     -----------------------------------------------------------------------------------------------------------------
     Guardar Cabecera ALPTABLA INICIO
     -----------------------------------------------------------------------------------------------------------------
-  
   */
-
 
   private arrCabMaster: any = [];
   saveCabeceraMaster( codigo: string, nombre: string, nomtag: string, gestion: string ) {
 
-    this.arrCabMaster = {      
-            
+    this.arrCabMaster = {                  
       master:  '',
       codigo:  codigo,
       nombre:  nombre,
@@ -43,10 +39,10 @@ export class ALPTABLAService {
       sgrupo:  'HCIE_GR',
       campo2:  '',
       lencod:  0.00
-
     }
 
     console.log(this.arrCabMaster);
+    
     return this.http.post( this.apiURL + '/control_alp_master_tabla/save_alp_master', this.arrCabMaster );
 
   }   
