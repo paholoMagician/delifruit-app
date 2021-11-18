@@ -1,0 +1,123 @@
+
+import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
+import { ControlMotivService } from '../services/control-motiv.service';
+
+@Component({
+  selector: 'app-mot-rec',
+  templateUrl: './mot-rec.component.html',
+  styleUrls: ['./mot-rec.component.css']
+})
+export class MotRecComponent implements OnInit {
+  public loading = false;
+  public loadinglist = true;
+  public listdata:any;
+  public titlemotiv = "";
+  public descriptmotiv = "";
+
+  constructor(private servicemotiv: ControlMotivService) { }
+  public toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+  ngOnInit(): void {
+    this.loadfun()
+  }
+  loadfun(){
+    this.loadinglist = true;
+    var tok = sessionStorage.getItem("Code_user");
+    var order = "asc"
+    this.servicemotiv.loaddata(`${tok}`, order).subscribe( x => {
+      this.listdata = x;
+      this.loadinglist = false;
+    }, (errr)=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al cargar la lista'
+      })
+      this.loadinglist = false;
+    })
+  }
+  sendmotiv(){
+    this.loading = true;
+    var date = new Date();
+    var tok = sessionStorage.getItem("Code_user");
+    let arrLog: any = {      
+      name_mot:  this.titlemotiv,
+      descrip_mot: this.descriptmotiv,
+      date: date,
+      token_session: tok
+    }
+    this.servicemotiv.senddata(arrLog).subscribe( x => {
+      this.loadfun();
+      var text = <HTMLInputElement> document.getElementById("input");
+      var textarea = <HTMLInputElement> document.getElementById("textarea");
+      text.value = ""
+      textarea.value = ""
+      this.loading = false;
+      this.toast.fire({
+        icon: 'success',
+        title: 'Guardado con exito'
+      })
+    }, (errr)=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al cargar la lista'
+      })
+      this.loading = false;
+    })
+  }
+  updatemotiv(name: string, description:string, id:number){
+    var title = <HTMLInputElement> document.getElementById(name);
+    var text = <HTMLInputElement> document.getElementById(description)
+    this.loadinglist = true;
+    var date = new Date();
+    var tok = sessionStorage.getItem("Code_user");
+    let arrLog: any = {     
+      id: id, 
+      name_mot:  title.value,
+      descrip_mot: text.value,
+      date: date,
+      token_session: tok
+    }
+    this.servicemotiv.updatedata(arrLog, id, `${tok}`).subscribe( x => {
+      this.loadinglist = false;
+      this.toast.fire({
+        icon: 'success',
+        title: 'Actualizado con exito'
+      })
+    }, (errr)=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al cargar la lista'
+      })
+      this.loadinglist = false;
+    })
+  }
+  deletemotiv(id:number){
+    this.loadinglist = true;
+    var tok = sessionStorage.getItem("Code_user");
+    this.servicemotiv.deletedata(id, `${tok}`).subscribe( x => {
+      this.loadfun();
+      this.toast.fire({
+        icon: 'success',
+        title: 'Eliminado con exito'
+      })
+      this.loadinglist = false;
+    }, (errr)=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al eliminar la lista'
+      })
+      this.loadinglist = false;
+    })
+  }
+
+}

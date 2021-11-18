@@ -6,7 +6,6 @@ import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 //#region Angular Material
-import {A11yModule} from '@angular/cdk/a11y';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
@@ -67,6 +66,7 @@ import { ControlCosechaComponent } from './control-cosecha/control-cosecha.compo
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { InformesComponent } from './informes/informes.component';
+import { MotRecComponent } from './mot-rec/mot-rec.component';
 
 //#endregion
 @NgModule({
@@ -84,10 +84,12 @@ import { InformesComponent } from './informes/informes.component';
     DevolsobrComponent,
     RecusadosComponent,
     ControlCosechaComponent,
-    InformesComponent
+    InformesComponent,
+    MotRecComponent
   ],
   
   imports: [
+    MatExpansionModule,
     NgxPaginationModule,
     BrowserModule, BarcodeGeneratorAllModule, QRCodeGeneratorAllModule ,DataMatrixGeneratorAllModule,
     //#region 
