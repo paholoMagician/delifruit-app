@@ -8,19 +8,20 @@ import { environment } from 'src/environments/environment.prod';
 })
 export class ControlMotivService {
   public port: string = environment.port;
+  constructor(private http:HttpClient) { }
   private apiURL = `https://alp-cloud.com:${this.port}/api`;
-
-  constructor(private http: HttpClient, public router: Router) { }
-  savemotiv(model:any[]) {
+  loaddata(tok:string, order:string){
+    return this.http.get(this.apiURL + `/Motiv/getMotiv/`+tok+`/`+ order );
+  }
+  senddata(model:any){
     return this.http.post( this.apiURL + '/Motiv/save_motiv', model )
   }
-  editmotiv(model:any[], id: number, tok: string) {
-    return this.http.put( this.apiURL + '/Motiv/putMotiv/'+ id +'/'+ tok ,model)
+  updatedata(model:any, id:number, tok:string){
+    return this.http.put( this.apiURL + `/Motiv/putMotiv/`+id+`/`+ tok, model )
   }
-  deletemotiv(id: number, tok: string) {
-    return this.http.get( this.apiURL + '/Motiv/DelMotiv/'+ id +'/'+ tok )
-  }
-  getmotiv(token: string, order: string) {
-    return this.http.get( this.apiURL + '/Motiv/getMotiv/'+ token +'/'+ order )
+  deletedata(id:number, token: string){
+    console.log(token);
+    return this.http.get( this.apiURL + '/Motiv/DelMotiv/'+ id +'/'+ token )
+    
   }
 }

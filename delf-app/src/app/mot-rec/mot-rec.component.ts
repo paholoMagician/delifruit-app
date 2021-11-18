@@ -1,25 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 import { ControlMotivService } from '../services/control-motiv.service';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
 
 @Component({
   selector: 'app-mot-rec',
@@ -27,39 +9,115 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./mot-rec.component.css']
 })
 export class MotRecComponent implements OnInit {
-  panelOpenState = true;
-  indicator = false;
-  public list:any; 
-  public descrip_mot: string = '';
-  public name_mot: string = '';
+  public loading = false;
+  public loadinglist = true;
+  public listdata:any;
+  public titlemotiv = "";
+  public descriptmotiv = "";
 
-  dataSource = ELEMENT_DATA
-
-  constructor(private service: ControlMotivService) { }
-
-  ngOnInit(): void {
-    this.loaddata();
-  }
-  
-  savemotivform(){
-    const x = sessionStorage.getItem('Code_user')
-    const date = new Date();
-    let arrLog: any = {      
-      name_mot:  this.name_mot,
-      descrip_mot: this.descrip_mot,
-      date: date,
-      token_session: x
+  constructor(private servicemotiv: ControlMotivService) { }
+  public toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
-    console.log(arrLog);
-    this.service.savemotiv(arrLog).subscribe( x => this.loaddata() )
+  })
+  ngOnInit(): void {
+    this.loadfun()
+  }
+  loadfun(){
+    this.loadinglist = true;
+    var tok = sessionStorage.getItem("Code_user");
+    var order = "asc"
+    this.servicemotiv.loaddata(`${tok}`, order).subscribe( x => {
+      this.listdata = x;
+      this.loadinglist = false;
+    }, (errr)=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al cargar la lista'
+      })
+      this.loadinglist = false;
+    })
+  }
+  sendmotiv(){
+    this.loading = true;
+    var date = new Date();
+    var tok = sessionStorage.getItem("Code_user");
+    let arrLog: any = {      
+      name_mot:  this.titlemotiv,
+      descrip_mot: this.descriptmotiv,
+      date: date,
+      token_session: tok
+    }
+    this.servicemotiv.senddata(arrLog).subscribe( x => {
+      this.loadfun();
+      var text = <HTMLInputElement> document.getElementById("input");
+      var textarea = <HTMLInputElement> document.getElementById("textarea");
+      text.value = ""
+      textarea.value = ""
+      this.loading = false;
+      this.toast.fire({
+        icon: 'success',
+        title: 'Guardado con exito'
+      })
+    }, (errr)=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al cargar la lista'
+      })
+      this.loading = false;
+    })
+  }
+  updatemotiv(name: string, description:string, id:number){
+    var title = <HTMLInputElement> document.getElementById(name);
+    var text = <HTMLInputElement> document.getElementById(description)
+    this.loadinglist = true;
+    var date = new Date();
+    var tok = sessionStorage.getItem("Code_user");
+    let arrLog: any = {     
+      id: id, 
+      name_mot:  title.value,
+      descrip_mot: text.value,
+      date: date,
+      token_session: tok
+    }
+    this.servicemotiv.updatedata(arrLog, id, `${tok}`).subscribe( x => {
+      this.loadinglist = false;
+      this.toast.fire({
+        icon: 'success',
+        title: 'Actualizado con exito'
+      })
+    }, (errr)=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al cargar la lista'
+      })
+      this.loadinglist = false;
+    })
+  }
+  deletemotiv(id:number){
+    this.loadinglist = true;
+    var tok = sessionStorage.getItem("Code_user");
+    this.servicemotiv.deletedata(id, `${tok}`).subscribe( x => {
+      this.loadfun();
+      this.toast.fire({
+        icon: 'success',
+        title: 'Eliminado con exito'
+      })
+      this.loadinglist = false;
+    }, (errr)=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al eliminar la lista'
+      })
+      this.loadinglist = false;
+    })
   }
 
-  loaddata(){
-    const x = sessionStorage.getItem('Code_user')
-    console.log(x)
-    console.log("asc")
-    this.service.getmotiv(`${x}`, "asc").subscribe( x => 
-     { console.log(x)
-     this.list = x} )
-  }
-}  
+}

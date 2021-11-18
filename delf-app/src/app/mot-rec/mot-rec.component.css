@@ -1,78 +1,106 @@
 .container{
     width: 100%;
-    padding: 0px;
-    margin: 0px;
-    background-color: rgb(231, 231, 231);
+    background-color: rgb(236, 236, 236);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
-.indicator{
-    width: 100%;
-}
-.form{
-    margin: 60px;
-    padding: 30px;
-    border-radius: 5px;
+.container-list{
+    padding: 15px;
+    background-color: white;
+    margin-top: 30px;
     width: 80%;
-    background-color: rgb(255, 255, 255)
+    border-radius: 6px;
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.55);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.55);
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.55);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
 }
-.title{
-    font-size: 18px;
-    color: #333333;
-    font-weight: 500;
-}
-.formint{
-    margin-top: 5px;
-    width: 100;
-}
-.finput{
-    margin-top: 6px;
+.search{
     width: 100%;
-}
-.input{
-    width: 100%;
-}
-
-.form{
-    margin: 20px;
-    padding: 30px;
-    border-radius: 5px;
-    width: 80%;
-    background-color: rgb(255, 255, 255)
-}
-.accordion{
-    width: 80%;
-}
-.expansion{
-    width: 100%;
-}
-.buttoms{
-    margin: 9px 0px;
-    width: 100%;
-    background-color: rgb(31, 31, 31);
-    color: white;
+    height: 50px;
+    display: flex;
 }
 .tablet{
     width: 100%;
-    height: auto;
 }
-.trtable{
+.trtablet{
     height: 50px;
-    border-bottom: 1px solid rgb(180, 180, 180);
+    border-bottom: 1px solid rgb(0, 0, 0);
+}
+.tdclasst{
+    text-align: center;
+    font-weight: 500;
+    color: #333333;
+    font-size: 16px;
+}
+.tdclass{
     text-align: center;
 }
-.tr2table{
-    height: 50px;
-    text-align: center;
+.btnicon{
+    transition: all ease-in .9s;
 }
-.tdtabletnum{
-    text-align: center;
+.icons{
+    opacity: 0.3;
 }
-.tdtablet{
-    text-align: center;
+.container-add{
+    background-color: white;
+    margin-top: 30px;
+    width: calc(80% + 30px);
+    overflow: hidden;
+    border-radius: 6px;
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.55);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.55);
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.55);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
 }
-.material-icons{
- font-size: 20px;
- opacity: 0.6;
+::ng-deep .mat-progress-bar-fill::after {
+    background-color: #333333;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+    background: #c9c9c9;
+}
+.title{
+    width: 100%;
+    font-size: 20px;
+    font-weight: 500;
+    color: #333333;
+}
+.form{
+    padding: 30px;
+}
+.inputf{
+    margin: 4px 0px;
+    width: 100%;
+}
+.butoms{
+    width: 100%;
+    margin: 10px 0px;
+    background-color: #333333;
+    color: white;
+}
+.inputsdis{
+    width: 100%;
+    text-align: center;
+    font-weight: 400;
+    color: #333333;
+    font-size: 16px;
+    border: 0;
+}
+.tdwidth1{
+    width: 20%;
+}
+.tdwidth1{
+    width: 70%;
+}
+.tdwidth1{
+    width: 10%;
 }
