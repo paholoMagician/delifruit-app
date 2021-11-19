@@ -1,4 +1,45 @@
-<app-mot-rec></app-mot-rec>
+<div class="container">
+        <mat-form-field class="input" appearance="fill">
+            <mat-label>Num. lote</mat-label>
+            <input id="input-code" (keyup.enter)="search()" minlength="19" (change)="search()" value="" matInput placeholder="ABC123" required>
+            <mat-icon matSuffix>qr_code_scanner</mat-icon>
+          </mat-form-field>
+
+          <mat-accordion class="accordion">
+            <mat-expansion-panel *ngFor="let lote of arrLotes" hideToggle [disabled]="panelOpenState">
+              <mat-expansion-panel-header>
+                <mat-panel-title style="margin-right: 10px;">
+                    <span class="title">Cantidad: </span>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <span class="text"> {{ lote.cantidad }}</span>
+                </mat-panel-description>
+                <button mat-icon-button class="btnicon" (click)="verified()" ><span class="iconst material-icons">edit</span></button>
+              </mat-expansion-panel-header>
+
+              <div class="cont">
+                <mat-form-field class="inpust">
+                    <mat-label>Motivos</mat-label>
+                    <mat-select [formControl]="motives">
+                      <mat-option *ngFor="let motiv of motivesitems" [value]="motiv">
+                        {{motiv}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+    
+                  <mat-form-field class="inpust">
+                    <mat-label>Camtidad</mat-label>
+                    <input type="number" max="25" min="0" matInput [formControl]="cant" placeholder="1">
+                    <mat-error *ngIf="cant.hasError('required')">La cantidad es requerida </mat-error>
+                  </mat-form-field>
+                  <button mat-flat-button class="butom" (click)="savedata()">Guardar</button>
+              </div>
+              
+            </mat-expansion-panel>
+          </mat-accordion>
+</div>
+
+
 <div class="d-flex justify-content-end p-3 bg-info" style="color: white;">
     <mat-icon>person_pin_circle</mat-icon> {{data_head | titlecase }}
 </div>

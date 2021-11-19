@@ -61,12 +61,15 @@ import { BarcodeGeneratorAllModule,QRCodeGeneratorAllModule,DataMatrixGeneratorA
 import { HeaderComponent } from './header/header.component';
 import { AuditoriaComponent } from './auditoria/auditoria.component';
 import { DevolsobrComponent } from './devolsobr/devolsobr.component';
-import { RecusadosComponent } from './recusados/recusados.component';
+import { RecusadosComponent, recusadosFragment } from './recusados/recusados.component';
 import { ControlCosechaComponent } from './control-cosecha/control-cosecha.component';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { InformesComponent } from './informes/informes.component';
 import { MotRecComponent } from './mot-rec/mot-rec.component';
+import { ContCosechaComponent } from './cont-cosecha/cont-cosecha.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ContDevolucionComponent } from './cont-devolucion/cont-devolucion.component';
 
 //#endregion
 @NgModule({
@@ -78,6 +81,7 @@ import { MotRecComponent } from './mot-rec/mot-rec.component';
     DashComponent,
     CalbanComponent,
     HaciendasComponent,
+    recusadosFragment,
     CreateCodeBarComponent,
     HeaderComponent,
     AuditoriaComponent,
@@ -85,7 +89,9 @@ import { MotRecComponent } from './mot-rec/mot-rec.component';
     RecusadosComponent,
     ControlCosechaComponent,
     InformesComponent,
-    MotRecComponent
+    MotRecComponent,
+    ContCosechaComponent,
+    ContDevolucionComponent
   ],
   
   imports: [
@@ -122,6 +128,7 @@ import { MotRecComponent } from './mot-rec/mot-rec.component';
     MatRadioModule,
     MatRippleModule,
     MatSelectModule,
+  
     MatSidenavModule,
     MatSliderModule,
     MatSlideToggleModule,
@@ -136,6 +143,7 @@ import { MotRecComponent } from './mot-rec/mot-rec.component';
     PortalModule,
     ScrollingModule,
     //#endregion
+    FlexLayoutModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -143,9 +151,10 @@ import { MotRecComponent } from './mot-rec/mot-rec.component';
     ReactiveFormsModule,
     RouterModule.forRoot([   
       { path: 'plagiarism',   component: InformesComponent },
-      { path: 'spa',          component: ControlCosechaComponent },
+      { path: 'spa',          component: ContCosechaComponent },
       { path: 'error_outline',component: RecusadosComponent },
-      { path: 'rule',         component: DevolsobrComponent },
+      { path: 'motive',       component: MotRecComponent },
+      { path: 'rule',         component: ContDevolucionComponent },
       { path: 'gpp_good',     component: AuditoriaComponent },
       { path: 'receipt_long', component: CreateCodeBarComponent },
       { path: 'date_range',   component: CalbanComponent },

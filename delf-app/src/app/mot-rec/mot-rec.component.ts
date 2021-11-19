@@ -46,33 +46,40 @@ export class MotRecComponent implements OnInit {
     })
   }
   sendmotiv(){
-    this.loading = true;
-    var date = new Date();
-    var tok = sessionStorage.getItem("Code_user");
-    let arrLog: any = {      
-      name_mot:  this.titlemotiv,
-      descrip_mot: this.descriptmotiv,
-      date: date,
-      token_session: tok
-    }
-    this.servicemotiv.senddata(arrLog).subscribe( x => {
-      this.loadfun();
-      var text = <HTMLInputElement> document.getElementById("input");
-      var textarea = <HTMLInputElement> document.getElementById("textarea");
-      text.value = ""
-      textarea.value = ""
-      this.loading = false;
-      this.toast.fire({
-        icon: 'success',
-        title: 'Guardado con exito'
+    var text = <HTMLInputElement> document.getElementById("input");
+    var textarea = <HTMLInputElement> document.getElementById("textarea");
+    if(text.value.length >= 1 && textarea.value.length >= 1 ){
+      this.loading = true;
+      var date = new Date();
+      var tok = sessionStorage.getItem("Code_user");
+      let arrLog: any = {      
+        name_mot:  this.titlemotiv,
+        descrip_mot: this.descriptmotiv,
+        date: date,
+        token_session: tok
+      }
+      this.servicemotiv.senddata(arrLog).subscribe( x => {
+        this.loadfun();
+        text.value = ""
+        textarea.value = ""
+        this.loading = false;
+        this.toast.fire({
+          icon: 'success',
+          title: 'Guardado con exito'
+        })
+      }, (errr)=>{
+        this.toast.fire({
+          icon: 'error',
+          title: 'Error al cargar la lista'
+        })
+        this.loading = false;
       })
-    }, (errr)=>{
+    }else{
       this.toast.fire({
         icon: 'error',
-        title: 'Error al cargar la lista'
+        title: 'Ingresa datos correctos'
       })
-      this.loading = false;
-    })
+    }
   }
   updatemotiv(name: string, description:string, id:number){
     var title = <HTMLInputElement> document.getElementById(name);

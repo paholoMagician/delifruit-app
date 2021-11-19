@@ -23,5 +23,8 @@ export class DevsobcontrolService {
   putSobDevs( lotePK: string, model: any [] ) {
     return this.http.put( this.apiURL + '/c_devsob/puttransprod/' + lotePK, model );
   }
+  getLoteUnit( codec_lotes_master: string, codec_lotes: string ) {
+    return this.http.get( this.apiURL + '/AuditPrint/GetLotes/' + codec_lotes_master + '/' + codec_lotes )
+  }
 
 }

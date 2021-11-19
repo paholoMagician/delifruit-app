@@ -32,7 +32,7 @@ export class DashComponent implements OnInit {
       this.modsArr = m;
       for( let i = 0; i<=this.modsArr.length; i++ )
       {
-        this.an.objectAnim( i, this.modsArr[i].id, 'enteranim ease 1.5s 1', 100 );
+        this.an.objectAnim( i, this.modsArr[i].id, 'enteranim ease 1s 1', 100 );
       }
     })
   }

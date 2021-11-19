@@ -211,7 +211,6 @@ export class ControlCosechaComponent implements OnInit {
           console.log('BORRADO');
           this.ggcosecha(50, 'desc');      
         })
-
         Swal.fire(
           'Deleted!',
           'Tu cosecha ha sido borrada!',
