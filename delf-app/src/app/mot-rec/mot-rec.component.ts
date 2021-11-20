@@ -16,20 +16,23 @@ export class MotRecComponent implements OnInit {
   public descriptmotiv = "";
 
   constructor(private servicemotiv: ControlMotivService) { }
-  public toast = Swal.mixin({
+
+  public toast = Swal.mixin({    
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3000,
+    timer: 2000,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)
       toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
   })
+
   ngOnInit(): void {
     this.loadfun()
   }
+
   loadfun(){
     this.loadinglist = true;
     var tok = sessionStorage.getItem("Code_user");

@@ -19,6 +19,10 @@ body{
     box-shadow: 5px 5px 10px  rgba(0,0,0,0.6);
 }
 
+.note {
+    font-size: 8pt;
+    color: slategrey;
+}
 
 .conts {
     height: 100vh;

@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 @Injectable({
   providedIn: 'root'
 })
+
 export class DevsobcontrolService {
 
   public  port: string = environment.port;
@@ -23,5 +24,6 @@ export class DevsobcontrolService {
   putSobDevs( lotePK: string, model: any [] ) {
     return this.http.put( this.apiURL + '/c_devsob/puttransprod/' + lotePK, model );
   }
-
+  
 }
+

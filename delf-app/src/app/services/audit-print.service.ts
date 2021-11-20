@@ -30,7 +30,9 @@ export class AuditPrintService {
   
   // https://alp-cloud.com:8430/api/AuditPrint/GetLotes/DEL_H/001
   getLoteUnit( codec_lotes_master: string, codec_lotes: string ) {
+    
     return this.http.get( this.apiURL + '/AuditPrint/GetLotes/' + codec_lotes_master + '/' + codec_lotes )
+  
   }
 
 }

@@ -1,5 +1,5 @@
-<div class="container">
-  <div class="container-add">
+
+  <div class="container-add w-100">
       <mat-progress-bar [ngStyle]="{'visibility':loading == true ? 'visible':'hidden'}" mode="query"></mat-progress-bar>
       <div class="form">
           <span class="title">Motivos</span>
@@ -17,7 +17,7 @@
           <button mat-raised-button class="butoms" (click)="sendmotiv()">Guardar</button>
       </div>
   </div>
-  <div class="container-list">
+  <div class="container-list w-100">
       <mat-progress-bar [ngStyle]="{'visibility':loadinglist == true ? 'visible':'hidden'}" mode="query"></mat-progress-bar>
       <table class="tablet">
           <tr class="trtablet">
@@ -36,4 +36,3 @@
           </tr> 
       </table>
   </div>
-</div>

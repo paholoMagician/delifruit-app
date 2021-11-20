@@ -1,9 +1,11 @@
-<app-mot-rec></app-mot-rec>
 <div class="d-flex justify-content-end p-3 bg-info" style="color: white;">
     <mat-icon>person_pin_circle</mat-icon> {{data_head | titlecase }}
 </div>
 
 <div class="conts table-responsive container-fluid">
+    <button class="btn btn-outline-secondary mt-2 d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+        <mat-icon> settings </mat-icon>
+     </button>
     <div class="container-fluid m-3" >
         <mat-form-field class="example-full-width w-100" appearance="fill" >
             <mat-label> <mat-icon>qr_code_scanner</mat-icon> Cod. Lote</mat-label>
@@ -19,30 +21,71 @@
 
     <div class="container-fluid d-flex justify-content-center">
 
-        <div  *ngIf="_product" >
+        <div  *ngIf="_product" class="prod" >
+            
             <div class="card" style="width: 18rem;" *ngFor="let x of arrLotes">
                 <div class="card-body">
-                  <h5 class="card-title">Cantidad: {{ x.cantidad }}</h5>
+                    <h3 class="text-warning bg-secondary p-2"> Recusados: </h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">C. Enfundada: 
+                            <strong> {{x.cant}}  
+                            <span class="text-danger" style="font-size: 8pt;"> -{{x.cant_dev}} (dev.) </span> </strong> <br>
+                            <span class="note"> F. enfunde: {{x.finit | date: 'short'}} </span>
+                        </li>
+                        <li class="list-group-item">C. Stock: <strong class="text-primary" >{{x.totalStock}}</strong></li>
+                        <li class="list-group-item"> <span class="text-danger"></span></li>
+                        <li class="list-group-item list-group-item-warning">
+                            Total:<span> <strong class="text-success mr-3"> {{_total}} </strong>
+                            </span>&nbsp;<strong class="text-danger" style="font-size: 8pt;">-{{_cant_recu}} (Rec.)</strong> 
+                        </li>
+                        <li class="list-group-item">
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected
+                                        value="{{x.name_mot}}"
+                                        (click)="getDataSel(x.name_mot, x.descrip_mot)"
+                                        *ngFor="let x of listdata">                        
+                                        {{x.name_mot}}                        
+                                </option>
+                              </select>
+                              <div class="mt-2 mb-2">
+                                <label for=""> Número: </label>
+                                <input class="form-control" [(ngModel)]="_cant_recu" type="number"
+                                       (keyup)="calc( _cant_recu, x.totalStock)" 
+                                       (change)="calc( _cant_recu, x.totalStock)" >
+                              </div>
+                              <div class="mb-2">
+                                  <button class="btn btn-success">
+                                      Reportar
+                                  </button>
+                              </div>
+                        </li>
+                    
+                    </ul>
+                      
                 </div>
               </div>
-              <select class="form-select" aria-label="Default select example">
-                <option selected>Opciones recusados:</option>
-                <option value="2">Robado</option>
-                <option value="3">Perdidos</option>
-                <option value="4">Dañados</option>
-              </select>
+              
 
-              <div class="mt-2 mb-2">
-                  <label for=""> Número: </label>
-                  <input class="form-control" type="number" >
-              </div>
-              <div class="mb-2">
-                  <button class="btn btn-success">
-                      Reportar
-                  </button>
-              </div>
+              
         </div>
     
+    </div>
+    
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+
+      <div class="offcanvas-header">
+        <h5 id="offcanvasTopLabel">
+            Motivación Recusados:
+        </h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
+        </button>
+      </div>
+
+      <div class="offcanvas-body">
+        <app-mot-rec></app-mot-rec>
+      </div>
+
     </div>
 
 </div>
