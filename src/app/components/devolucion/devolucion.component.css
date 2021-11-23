@@ -1,0 +1,173 @@
+.container{
+    background-color: rgb(242, 241, 241);
+    min-height: 100%; 
+    padding: 0;
+    margin: 0px;
+    min-width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    transition: all ease-in .3s;
+}
+.subcontainer{
+    opacity: 0;
+    transition: all ease-in .4s;
+    overflow: hidden;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    padding-top: 20px;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+}
+.animation{
+    padding: 0px;
+    opacity: 1;
+}
+.input {
+    margin-top: 60px;
+    width: 86%;
+}
+.container-card{
+    margin-top: 30px;
+    padding-bottom: 10px;
+    width: 100%;
+    display: none;
+    flex-direction: row;
+    justify-content: start;
+    align-items: flex-start;
+    overflow-x: scroll;
+}
+.cards{
+    padding: 5%;
+    min-width: 70%;
+    margin-left: 9%;
+    margin-right: 8%;
+}
+.seccions{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+}
+.title{
+    font-size: 15px;
+    font-weight: 500;
+    color: rgb(33, 33, 33);
+}
+.text{
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(33, 33, 33);
+}
+.inputedit{
+    width: 80px;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(33, 33, 33);
+    text-align: right;
+    border: 0px;
+    background-color: rgb(243, 240, 240);
+    border-bottom: 1px solid rgb(94, 94, 94);
+}
+.textareaint{
+    width: 200px;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(33, 33, 33);
+    text-align: right;
+    border: 0px;
+    background-color: rgb(243, 240, 240);
+    border-bottom: 1px solid rgb(94, 94, 94);
+}
+.textareaint:focus{
+    text-align: start;
+    outline: none;
+    border-bottom: 1px solid rgb(63, 85, 255);
+}
+.inputedit:focus{
+    outline: none;
+    border-bottom: 1px solid rgb(63, 85, 255);
+}
+.butons{
+    margin-top: 20px;
+    padding: 0px 25px;
+    background-color: rgb(65, 65, 65);
+    color: white;
+}
+::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    transition: all ease-in .3s;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #ededed;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+      transition: all ease-in .3s;
+    background: rgb(201, 201, 201);
+    border-radius: 4px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .tablet{
+    width: 100%;
+}
+.trtablet{
+    height: 50px;
+    border-bottom: 1px solid rgb(0, 0, 0);
+}
+.tdclasst{
+    text-align: center;
+    font-weight: 500;
+    color: #333333;
+    font-size: 16px;
+}
+.tdclass{
+    text-align: center;
+}
+.btnicon{
+    opacity: 0.6;
+}
+.card-tablet{
+    margin-top: 20px;
+    width: 85%;
+}
+.iconst{
+    font-size: 22px;
+    color: rgb(109, 109, 109);
+}
+.resultsearch{
+    margin: 12px 0px;
+    width: 100%;
+    text-align: center;
+}
+.resultsearch1{
+    margin: 12px 0px;
+    width: 100%;
+    text-align: center;
+}
+.negativenum{
+    width: 80px;
+    font-size: 15px;
+    font-weight: 400;
+    text-align: right;
+    border: 0px;
+    border-bottom: 1px solid rgb(94, 94, 94);
+    color: rgb(255, 0, 0);
+}
+.totalnum{
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(0, 218, 7);
+}

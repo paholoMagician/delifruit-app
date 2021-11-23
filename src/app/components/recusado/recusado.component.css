@@ -1,0 +1,95 @@
+.container{
+    background-color: rgb(242, 241, 241);
+    min-height: 100vh; 
+    padding: 0;
+    margin: 0px;
+    min-width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    transition: all ease-in .3s;
+}
+.slidebar{
+    width: 400px;
+}
+.input {
+    opacity: 0;
+    transition: all ease-in .3s;
+    margin-top: 100px;
+    width: 86%;
+}
+.titlemenu{
+    margin-top: 60px;
+    width: 86%;
+    display: flex;
+    justify-content: start;
+    font-size: 20px;
+    color: #333333;
+}
+.animation{
+    margin-top: 20px;
+    opacity: 1;
+}
+.title{
+    font-size: 16px;
+    color: #333333;
+    font-weight: 500;
+    margin-right: 20px;
+}
+.text{
+    font-size: 16px;
+    color: #333333;
+    font-weight: 400;
+}
+.btnicon{
+    opacity: 0.5;
+    position: absolute;
+    top: 6px;
+    right: 10px;
+}
+.accordion{
+    margin-top: 40px;
+    position: relative;
+    width: 80%;
+}
+.mat-expansion-panel-header-title{
+    margin-right: 10px;
+}
+.inpust{
+    margin: 5px;
+    width: 100%;
+}
+.cont{
+    padding: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.butom{
+    margin: 10px 0px;
+    width: 100%;
+    background-color: #333333;
+    font-size: 16px;
+    color: white;
+}
+.cardc{
+    width: 80%;
+}
+.contexp{
+    width: 100%;
+    padding: 10px 0px;
+}
+.titlecard{
+    margin: 10px 0px;
+    font-size: 15px;
+    color: #333333;
+    font-weight: 500;
+}
+.textcard{
+    font-size: 15px;
+    color: #333333;
+    font-weight: 400;
+}

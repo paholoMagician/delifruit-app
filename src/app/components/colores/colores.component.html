@@ -1,0 +1,38 @@
+<div class="cont">
+    <table class="continput">
+        <tr class="continputtr">
+            <td class="">
+                <input type="color" class="inputcolor" style="width: 40px;" [(ngModel)]="_color" id="exampleColorInput">
+            </td>
+            <td class="">
+                <mat-form-field style="width: 100%;" class="inputcolor">
+                    <mat-label>Descripción:</mat-label>
+                    <input matInput placeholder="----" class="inputcolor" [(ngModel)]="_valor" >
+                </mat-form-field>
+            </td>
+            <td style="text-align: center;">
+                <button class="btn btn-primary" style="margin:  10px;" (click)="secuenciador(); salpmaster(_color, _valor)">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </td>
+        </tr>
+    </table>
+    <mat-card class="tabled">
+    <table style="width: 100%;">
+    <tr class="tabled">
+        <td class="tdtitle">Color</td>
+        <td class="tdtitle">Nombre</td>
+        <td class="tdtitle">Borrar</td>
+    </tr>
+    <tr class="tabled" *ngFor=" let x of arrGcolor">
+        <td style="display: flex;justify-content: center;" class="tdtitle"><div [ngStyle]="{'background-color': x.hex_cod_color}" class="color"></div></td>
+        <td style="text-align: center;" class="tdtext">{{x.name_labor}}</td>
+        <td style="text-align: center;" class="tdtitle"><button (click)="removecolor(x.hex_cod_color, x.s_codec)" class="editbtn" mat-icon-button><mat-icon>delete</mat-icon>
+          </button></td>
+    </tr>
+</table>
+</mat-card>
+</div>
+
+
+

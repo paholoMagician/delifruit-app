@@ -1,0 +1,80 @@
+<div class="container">
+    <div class="subcontainer" [class.animation]="show">
+        <mat-form-field class="input" appearance="fill">
+            <mat-label>Num. lote</mat-label>
+            <input id="input-code" (keyup.enter)="getLotes()" (change)="getLotes()" value="" matInput placeholder="ABC123" required>
+            <mat-icon matSuffix>qr_code_scanner</mat-icon>
+          </mat-form-field>
+          <div class="container-card" [ngStyle.lt-sm]="{'display' : 'flex'}">
+            <mat-card class="cards" *ngFor="let data of arrLotes">
+                <div class="seccions"><span class="title">Lote: </span><span class="text">{{ data.hacienda_tag | slice:0:15 }}</span> </div>
+                <div class="seccions"><span class="title">Cantidad: </span><span class="text">{{data.cantidad}}</span> </div>
+                <div class="seccions"><span class="title">Cant. Devolucion: </span>-<input id="_dev_cant" type="number" class="negativenum" [(ngModel)]="_dev_cant"></div>
+                <div class="seccions"><span class="title">Total: </span><span class="totalnum">{{ data.cantidad - _dev_cant }}</span> </div>
+                <div class="seccions"><span class="title">Motivo: </span><textarea type="text" id="_obser" (keyup.enter)="sDevsobs( data.hacienda_tag, data.finit, _obser, data.cantidad, _dev_cant )" [(ngModel)]="_obser" class="textareaint" [value]=""></textarea></div>
+               <button mat-raised-button class="butons" (click)="sDevsobs( data.hacienda_tag, data.finit, _obser, data.cantidad, _dev_cant )">Guardar</button>
+            </mat-card>
+         </div>
+          <mat-card class="card-tablet" [ngStyle.xs]="{'display' : 'none'}">
+            <table class="tablet">
+              <tr class="trtablet">
+                  <td class="title " style="text-align: center;">Lote</td>
+                  <td class="title " style="text-align: center;">Cantidad</td>
+                  <td class="title " style="text-align: center;">Cant. Devolucion</td>
+                  <td class="title " style="text-align: center;">Total</td>
+                  <td class="title " style="text-align: center;">Motivo</td>
+                  <td class="title " style="text-align: center;">Aplicar</td>
+              </tr>
+              <tr class="trtable" *ngFor="let data of arrLotes">
+                  <td class="text " style="text-align: center;"><span class="text">{{ data.hacienda_tag | slice:0:15 }}</span></td>
+                  <td class="text " style="text-align: center;"><span class="text">{{data.cant}}</span></td>
+                  <td class="text " style="text-align: center;">-<input type="number" class="negativenum" [(ngModel)]="_dev_cant"></td>
+                  <td class="text "><span class="totalnum">{{ data.cant - _dev_cant }}</span></td>
+                  <td class="text "><textarea type="text" class="textareaint" style="width: 150px;" [(ngModel)]="_obser" [value]=""></textarea></td>
+                  <td class="text " style="text-align: center;"><button mat-icon-button class="btnicon" (click)="sDevsobs( data.lote_prod, data.finit, _obser, data.cant, _dev_cant )" ><span class="iconst material-icons">save</span></button></td>
+              </tr> 
+          </table>
+          <div *ngIf="resultsearch;" class="resultsearch">Sin resultados</div>
+      </mat-card>
+    
+    
+          <div class="container-card" [ngStyle.lt-sm]="{'display' : 'flex'}">
+             <mat-card class="cards" *ngFor="let data of arrDevs">
+                 <div class="seccions"><span class="title">Fecha de creacion: </span><span class="text">{{ data.finit | date: 'short' }}</span> </div>
+                 <div class="seccions"><span class="title">Fecha de devolución: </span><span class="text">{{ data.ffin  | date: 'short' }}</span> </div>
+                 <div class="seccions"><span class="title">Des. Lote: </span><span class="text">{{ data.nom_lote }} </span> </div>
+                 <div class="seccions"><span class="title">Motivo: </span><span class="text">{{ data.observ_dev }}</span> </div>
+                 <div class="seccions"><span class="title">Lote prod.: </span><span class="text">{{ data.lote_prod }}</span> </div>
+                 <div class="seccions"><span class="title">Cant. Dev.: </span><input  max="25" min="1"  type="number" class="inputedit" [value]="data.cant_dev"></div>
+                 <div class="seccions"><span class="title">Cant. Sob.: </span><span class="text">{{ data.total }}</span> </div>
+                <button mat-raised-button class="butons" (click)="updatePK(data.lote_prod, data.finit, data.observ_dev, data.cant, data.lote_prod)">Guardar</button>
+             </mat-card>
+          </div>
+          <mat-card class="card-tablet" [ngStyle.xs]="{'display' : 'none'}">
+          <table class="tablet">
+            <tr class="trtablet">
+                <td class="title " style="text-align: center;">Editar</td>
+                <td class="title " style="text-align: center;">Fecha de creacion</td>
+                <td class="title " style="text-align: center;">Fecha de devolución</td>
+                <td class="title " style="text-align: center;">Des. Lote</td>
+                <td class="title " style="text-align: center;">Motivo</td>
+                <td class="title " style="text-align: center;">Lote prod</td>
+                <td class="title " style="text-align: center;">Cant. Dev</td>
+                <td class="title " style="text-align: center;">Cant. Sob</td>
+            </tr>
+            <tr class="trtable" *ngFor="let data of arrDevs">
+                <td class="text " style="text-align: center;"><button mat-icon-button class="btnicon" (click)="updatePK(data.lote_prod, data.finit, data.observ_dev, data.cant, data.lote_prod)"><span class="material-icons icons">autorenew</span></button></td>
+                <td class="text " style="text-align: center;"><span class="text">{{ data.finit | date: 'short' }}</span></td>
+                <td class="text " style="text-align: center;"><span class="text">{{ data.ffin  | date: 'short' }}</span></td>
+                <td class="text " style="text-align: center;"><span class="text">{{ data.nom_lote }}</span></td>
+                <td class="text " style="text-align: center;"><span class="text">{{ data.observ_dev }}</span></td>
+                <td class="text " style="text-align: center;"><span class="text">{{ data.lote_prod }}</span></td>
+                <td class="text "><input type="number" max="25" min="1" class="inputedit" id="id-{{data.lote_prod}}" [value]="data.cant_dev"></td>
+                <td class="text " style="text-align: center;"><span class="text">{{ data.total }}</span></td>
+            </tr> 
+        </table>
+        <div *ngIf="resultsearch1;" class="resultsearch1">Sin resultados</div>
+    </mat-card>
+          
+    </div>
+    </div>

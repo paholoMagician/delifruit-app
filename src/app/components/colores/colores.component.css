@@ -1,0 +1,49 @@
+.cont{
+    background-color: #e8e8e8;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+.tabled{
+    margin-top: 60px;
+    width: 90%;
+}
+.tdcolor{
+    height: 60px;
+}
+.tdtitle{
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    height: 60px;
+    text-align: center;
+}
+.color{
+    padding: 10px;
+    width: 60px;
+    height: 40px;
+    border-radius: 5px;
+}
+.tdtext{
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333333;
+}
+.continput{
+    width: 80%;
+    margin-top: 60px;
+}
+.continputtr{
+    width: 100%;
+}
+.inputcolor{
+    width: 100%;
+}
+.inputcolor{
+    width: 80%;
+}

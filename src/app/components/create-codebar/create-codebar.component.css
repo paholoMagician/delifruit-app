@@ -1,0 +1,29 @@
+.color-selected {
+    width: 25px;
+    height: 52.03px;
+    border: dashed 1px gray;
+}
+
+.nshow {
+    font-size: 25pt;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    color: whitesmoke;
+}
+.selectitems:hover{
+    background-color: rgb(206, 206, 206);
+}
+.codeback{
+    overflow: hidden;
+    width: auto;
+    padding: 5px;
+    background-color:#333333;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.d-flex{
+    width: 80%;
+}

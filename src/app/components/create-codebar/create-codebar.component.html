@@ -1,0 +1,289 @@
+
+<div class="d-flex justify-content-end p-3 bg-info" style="color: white;">
+    <mat-icon>person_pin_circle</mat-icon> {{data_head | titlecase }}
+</div>
+
+  <!-- Modal Haciendas -->
+  <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title d-flex align-items-center" id="exampleModalLabel">
+              <mat-icon>gite</mat-icon> Tabla de haciendas
+            </h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="tabl table-responsive">
+                {{titleModal}}...
+                <table class="table table-dark" >                    
+                    <thead class="table-success">
+                        <th>Código </th>
+                        <th>Tag    </th>
+                    </thead>                  
+                    <tbody>
+                        <tr *ngFor="let x of arrHaciendas" (click)="getDataTables( 'codigo_hac_bcod', x.nomtag, 1, x.codigo )">
+                            <td> {{x.codigo}} </td>
+                            <td> {{x.nomtag}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+    <!-- Modal Lotes -->
+  <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title d-flex align-items-center" id="exampleModalLabel">
+            <mat-icon>gite</mat-icon> Tabla de lotes
+          </h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="tabl table-responsive">
+              {{titleModal}}...<br>
+              <span class="notes"> Lotes de la hacienda: <strong class="text-success" > {{namHacienda}}</strong> </span>
+                <table class="table table-dark">
+                    <thead class="table-success" >
+                        <th>Código   </th>
+                        <th>Nombre   </th>
+                    </thead>
+                    <!-- <tbody>
+                        <tr>
+  
+                        </tr>
+                    </tbody> -->
+                    <tbody>
+                        <tr *ngFor="let x of arrFilterGet" (click)="getDataTables( 'codigo_lot_bcod', x.codigo, 2, '' )" >
+                            <td>
+                              {{x.codigo}} 
+                            </td>
+                            <td>
+                              {{x.nombre}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- Modal colores -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title d-flex align-items-center" id="exampleModalLabel">
+                <mat-icon>margin</mat-icon> Calendario Bananero
+            </h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="tabl table-responsive">
+                  <table class="table table-dark">
+                      <thead class="table-success" >
+                          <th>Año         </th>
+                          <th>Periodo     </th>
+                          <th>Semana      </th>
+                          <th>Fec. Inicio </th>
+                          <th>Fec. Fin    </th>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let x of arrDp08acal" class="tr" [ngStyle]="{'border-color': x.color_asign}" >
+                              <td> {{x.anio}} </td>
+                              <td> {{x.peri}} </td>
+                              <td> {{x.sema}} </td>
+                              <td> {{x.finicio | date: 'd/M/yy'}} </td>
+                              <td> {{x.ffin | date: 'd/M/yy'}} </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="conts table-responsive container-fluid">
+    <mat-stepper linear #stepper>
+      <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+        <form [formGroup]="firstFormGroup" style="display: flex;align-items: center;flex-direction: column;">
+          <ng-template matStepLabel>Semana y la hacienda</ng-template>
+          <mat-form-field appearance="fill"  style="width: 80%;margin: 6px;margin-top: 20px;">
+            <mat-label>
+              Semana:
+          </mat-label>
+          <mat-select formControlName="semana">
+            <mat-option value="one" *ngFor="let jj of arrDp08acal">
+              <div class="d-flex align-items-center justify-content-between"
+                   (click)="asignData(jj.color_asign, 'sem:' + jj.sema + '/' + 'peri:' + jj.peri + '/' + 'anio:' + jj.anio )">
+                  <div style="width: 10px; height: 10px;" [ngStyle]="{'background-color': jj.color_asign}"></div> Sem: {{jj.sema}} / {{jj.peri}} / {{jj.anio}}
+              </div>
+            </mat-option>
+          </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" style="width: 80%;margin: 6px;">
+            <mat-label>
+              Hacienda:
+          </mat-label>
+          <mat-select formControlName="hacienda">
+            <mat-option value="one" *ngFor="let x of arrHaciendas">
+              <div class="d-flex align-items-center justify-content-between" (click)="getDataTables( 'codigo_hac_bcod', x.nomtag, 1, x.codigo )">
+               Sem: {{x.codigo}} / Tag: {{x.nomtag}}
+              </div>
+            </mat-option>
+          </mat-select>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Lote y año</ng-template>
+          <mat-form-field appearance="fill" style="width: 80%;margin: 6px;">
+            <mat-label>
+              Lote:
+          </mat-label>
+          <mat-select formControlName="lote">
+            <mat-option value="one" *ngFor="let x of arrFilterGet">
+              <div class="d-flex align-items-center justify-content-between" (click)="getDataTables( 'codigo_lot_bcod', x.codigo, 2, '' )">
+               Nom: {{x.nombre}} / Cod: {{x.codigo}}
+              </div>
+            </mat-option>
+          </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Año:</mat-label>
+            <input type="number" matInput formControlName="inputyear" [disabled]="false" placeholder="Last name, First name">
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Regresar</button>
+            <button mat-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="threeFormGroup" [editable]="isEditable">
+        <form [formGroup]="threeFormGroup">
+        <ng-template matStepLabel>Cantidad y generar</ng-template>
+        <mat-form-field appearance="fill" style="width: 80%;margin: 6px;">
+          <mat-label>Cantidad:</mat-label>
+          <input type="number" matInput formControlName="cant" [(ngModel)]="_secuencia" (change)="getDataTables('codigo_sec_bcod', _secuencia, 3,'')" (keyup)="getDataTables( 'codigo_sec_bcod', _secuencia, 3, '' )">
+        </mat-form-field>
+        </form>
+        <div style="display: flex;flex-direction: row;">
+          <button mat-button>Regresar</button>
+          <button mat-button >Generar ( {{_secuencia}} )</button>
+          <div class="codeback">Código generado: <strong class="text-success" > ---{{bar_codec}}---</strong>    </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  <div class="d-flex justify-content-center flex-wrap" style="width: 80%;margin: auto;">
+      <div class="p-4" style="width: 100%;">
+        <p class="bg-info p-3 text-outline d-flex align-items-center" style="width: 100%;">
+          <mat-icon>how_to_vote</mat-icon> Historial de impresiones:
+        </p>
+        <div  style="width: 100%; height: 150px; overflow: auto; ">
+          <ol class="list-group list-group-numbered" style="width: 100%;">
+            <li *ngFor="let jj of ArrAudit" style="width: 100%;" (click)="getAuditImpress(jj.codec_lotes_master+'-'+jj.codec_lotes, jj.cantidad)"
+                class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold"> {{jj.codec_lotes}} </div> {{jj.hacienda_tag}}
+                </div>
+                <span class="badge bg-primary rounded-pill"> {{jj.cantidad}} </span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  
+    <div class="p-3 w-100  d-flex justify-content-between align-items-center flex-wrap" style="display: flex;flex-direction: column;align-items: center;">
+  
+      <div style="margin: auto;background-color: rgb(116, 213, 216); padding: 5px;" class="rounded-end d-flex align-items-center m-2">
+          
+          <div>
+            Cod:      <strong> {{codecSearch}}</strong> /
+            Cantidad: <strong> {{cantCod}} </strong>
+          </div>
+          <div class="bn d-flex" (click)="imprSelec('dataQR')">
+            <!-- <span class="icon-print"></span> Imprimir por página -->
+            <mat-icon>print</mat-icon>
+          </div>
+      </div>
+  
+      <div class="d-flex justify-content-center m-2" >
+        <div class="numb d-flex align-items-center" >
+  
+          P. Act.:
+          <input type="number"
+                 style="width: 60px;"
+                 class="paginationId form-control"
+                 [(ngModel)]="_nPageCont"
+                 name="_nPageCont"
+                 id="pID" (change)="shist(_nPageCont)"
+                 (keyup.enter)="shist(_nPageCont)" >
+        </div>
+  
+        <div class="numb d-flex align-items-center">
+  
+          Cant. Pag.:
+          <input type="number"
+                 style="width: 60px;"
+                 class="paginationId form-control"
+                 [(ngModel)]="_perPage"
+                 name="_perPage" id="pID"
+                 (change)="shistPerPage(_perPage)"
+                 (keyup.enter)="shistPerPage(_perPage)">
+        </div>
+  
+      </div>
+  
+      <div class="paginador d-flex flex-column text-secondary align-items-center m-2 border-secondary">
+        <pagination-controls (pageChange)="_nPageCont = $event"></pagination-controls>      
+      </div>
+  
+    </div>
+  
+      <hr>
+      <!-- <div id="qr"></div> -->
+      <div class="qr mt-3 container-fluid d-flex justify-content-between" id="dataQR">
+        <div class="d-flex" *ngFor="let qr of arrAuditFilter | paginate: { itemsPerPage: _perPage, currentPage: _nPageCont }" [id]="qr.id"  >
+   
+              <!-- #DEL_H_001_20210001 -->
+              {{ createQRO(qr.hacienda_tag, qr.id, qr.name_labor) }}
+          
+          <!-- <div style="font-size: 7pt; font-family: Arial, Helvetica, sans-serif; padding: 2px; ">
+              COL.: {{ qr.name_labor   | uppercase  }}
+              <br>
+              COD.: {{ qr.hacienda_tag | slice:5:25 }}
+          </div> -->
+        </div>
+        
+        <!-- <div class="etiqueta d-flex" *ngFor="let qr of arrCode" >
+          <div [id]="qr.secuence"></div>
+          <div id="data-{{qr.secuence}}"></div>
+        </div> -->
+  
+      </div>    
+  </div>
+  
