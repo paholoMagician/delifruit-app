@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { ValidationHttpService } from 'src/app/services/validation-http.service';
@@ -11,29 +12,44 @@ import Swal from 'sweetalert2';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
-
+  formlogin = this._formBuilder.group({
+    WebUsu: ['', Validators.required],
+    WebPass: ['', Validators.required],
+  });
+  toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
   passwordType: string   = 'password';
   passwordShow: boolean  = false;
   password: string       = '';
   usuario: string        = '';
   public _alerts: string = '';
-
+  hide = true
   env = environment;
- 
-  constructor(public userService: LoginService,
+  show = false
+  constructor(private _formBuilder: FormBuilder,public userService: LoginService,
     public router: Router, private httpValidate: ValidationHttpService) { }
 
   ngOnInit() {
     this.verificacion();
+    setTimeout(() => {
+      this.show = true
+    }, 60);
   }
 
-  verificacion() {    
+  verificacion() {   
     if (sessionStorage.getItem('User_Name') == '' || sessionStorage.getItem('User_Name') == null) {
-      this.router.navigate(['/login']);
-    }
-    else {
-      this.router.navigate(['/camview']);
+      this.router.navigate(['login']);
+    } else {
+      this.router.navigate(['dash']);
     }
   }
 
@@ -47,52 +63,38 @@ export class LoginComponent implements OnInit {
       this.passwordType = 'password';
     }
   }
-
   public arrLogin: any = [];
-  logeo( a: string ,b: string ) {
-
-    let arrLog: any = {      
-      WebUsu:  a,
-      WebPass: b
-    }
-
-    console.log(arrLog);
-    this.userService.login(arrLog).subscribe( x => {
-      this.arrLogin = x;      
-      
-      // console.log(this.arrLogin)
-
-      let name     = this.arrLogin.webUsu;
-      let estado   = this.arrLogin.tipoMu;
-      let CodeUser = this.arrLogin.codeUser;
-      
-      console.log(name + ' : ' + estado + ' : ' + CodeUser);
-      
-      sessionStorage.setItem('User_Name', name);
-      sessionStorage.setItem('Estado', estado);
-      sessionStorage.setItem('Code_user', CodeUser);
-
-      this.verificacion();
-      this.router.navigate(['/dash']);
-
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Te has logeado con éxito',
-        showConfirmButton: false,
-        timer: 2000
+  logeo(){
+    if(this.formlogin.valid){
+     let arrLog: any = {      
+       WebUsu:  "a,",
+       WebPass: "b"
+     }
+      this.userService.login(this.formlogin.value).subscribe( x => {
+        this.arrLogin = x;      
+        let name     = this.arrLogin.webUsu;
+        let estado   = this.arrLogin.tipoMu;
+        let CodeUser = this.arrLogin.codeUser;
+        console.log(name + ' : ' + estado + ' : ' + CodeUser);
+        sessionStorage.setItem('User_Name', name);
+        sessionStorage.setItem('Estado', estado);
+        sessionStorage.setItem('Code_user', CodeUser);
+        this.verificacion();
+        this.toast.fire({
+          icon: 'success',
+          title: 'Inicio exitoso'
+        })
+        this.router.navigate(['/dash'])
+      }, (e)=> {
+        console.log(e)
+        this.toast.fire({
+          icon: 'error',
+          title: e.error
+          
+        })
       })
-
-    }, ()=> {
-      let d: string = '';
-      this.httpValidate
-          .validateSession( 'demAL', 
-                            'Algo salió mal!',
-                            'Revisa tu usuario y contraseña.',
-                            'alert-danger animated bounceInDown fast',
-                             2, 'warning');
-    })
-
+    
+    }
   }
 
 }

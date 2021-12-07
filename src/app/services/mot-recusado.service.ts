@@ -21,6 +21,9 @@ export class MotRecusadoService {
   deletedata(id:number, token: string){
     console.log(token);
     return this.http.get( this.apiURL + '/Motiv/DelMotiv/'+ id +'/'+ token )
-    
+  }
+  deleteitemhis(id:number, token: string){
+    console.log(token);
+    return this.http.get( this.apiURL + '/RecuData01/delRecuData01/'+ token +'/'+ id )
   }
 }

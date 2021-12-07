@@ -1,76 +1,22 @@
-
-<div class="d-flex justify-content-end p-3 bg-info" style="color: white;">
-    <mat-icon>person_pin_circle</mat-icon> {{data_head | titlecase }}
- </div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel"> Datos obtenidos del control de colores. </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="tabl table-responsive">
-                <table class="table table-dark">
-                    <thead class="table-success" >
-                        <th>
-                            Color
-                        </th>
-                        <th>
-                            Descripción
-                        </th>
-                        <th>
-                            <mat-icon style="background-color: transparent;" >ok</mat-icon>
-                        </th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let x of arrGcolor" (click)="asignColor(x.hex_cod_color, x.name_labor)" >
-                            <td [ngStyle]="{'background-color': x.hex_cod_color}" ></td>
-                            <td> {{x.name_labor}} </td>
-                            <td style="color: yellowgreen;">
-                                <mat-icon>arrow_forward_ios</mat-icon>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+<div class="contener">
+    <div class="menuvert" [class.menuanimation]="show">
+        <div class="leftmenu" ngClass.lt-sm="hiddentitle"><span class="material-icons" style="color: white;margin-right: 5px;">{{icon}}</span> {{title_header | titlecase}}</div>
+        <div class="rigthmenu">
+            <div class="rigtmenut">Bienvenido, <span style="font-weight: 500;"> {{ user | titlecase }} </span></div>
+            <button (click)="logout()" style="margin-left: 10px;" mat-icon-button><mat-icon style="color: white;">logout</mat-icon></button>
         </div>
       </div>
-    </div>
-  </div>
-
-
-<div class="conts table-responsive container-fluid">    
-    <div class="d-flex justify-content-between flex-wrap p-2" >
-        <div>
-            Seleccione un color:
-            <div class="control-color d-flex align-items-center justify-content-center"
-                 [ngStyle]="{'background-color': _color}" (click)="gcolor()"
-                 data-bs-toggle="modal" data-bs-target="#exampleModal">
-
-                 <label style="color: white;" >
-                    {{_codec_color}}
-                 </label>
-
-            </div>
-        </div>
-        <mat-form-field class="example-full-width" style="width: 300px;" appearance="fill">
+      <mat-card class="carditems" [ngStyle.xs]="{'width' : '90%'}" [class.carditemsanit]="show">
+        <button id="btncolorselect" (click)="gcolor()" class="btnselectcolor" mat-button  [ngStyle.xs]="{'width' : '100%'}">Selecione un color</button>
+        <mat-form-field class="inputscolors" appearance="fill" [ngStyle.xs]="{'width' : '100%'}">
             <mat-label>Año</mat-label>
             <input matInput placeholder="" disabled [(ngModel)]="_periodo" >
         </mat-form-field>
-
-        <mat-form-field class="example-full-width" style="width: 300px;" appearance="fill">
+        <mat-form-field class="inputscolors" appearance="fill"  [ngStyle.xs]="{'width' : '100%'}">
             <mat-label>Semana</mat-label>
             <input matInput placeholder="" [(ngModel)]="_semana" >
         </mat-form-field>
-
-        <mat-form-field appearance="fill" style="width: 300px;" class="example-form-field">
+        <mat-form-field appearance="fill" class="inputscolors"  [ngStyle.xs]="{'width' : '100%'}">
             <mat-label>Rango de fechas:</mat-label>
             <mat-date-range-input [rangePicker]="rangePicker">
               <input matStartDate placeholder="Start date" [(ngModel)]="_startDate" >
@@ -79,55 +25,34 @@
             <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #rangePicker>
               <mat-date-range-picker-actions>
-                <button mat-button matDateRangePickerCancel>Cancel</button>
-                <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
+                <button mat-button matDateRangePickerCancel>Cancelar</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply>Aplicar</button>
               </mat-date-range-picker-actions>
             </mat-date-range-picker>
           </mat-form-field>
-
-    </div>
-    
-    <div class="tabl table-responsive container-fluid">
-        <div class="btnSetts d-flex">
-            <button mat-raised-button class="d-flex align-items-center" (click)="sDP08ACAL (_startDate, _endDate )" color="primary"> <mat-icon>add</mat-icon><span> Guardar </span></button>
-            <div class="btn btn-secondary d-flex align-items-center" (click)="orderType()">
-                <mat-icon>swap_vert</mat-icon> Orden: {{order}}
-            </div>
+          <div style="width: 100%;margin-top: 15px;">
+            <button (click)="sDP08ACAL(_startDate, _endDate )" style="background-color: #1a5ef3; color: white;" mat-raised-button>Crear</button>
         </div>
-        <table class="table table-dark">
-            <thead class="table-success" >
-                <th  >
-                    Año
-                </th>
-                <th>
-                    Periodo
-                </th>
-                <th>
-                    Semana
-                </th>
-                <th>
-                    Fec. Inicio
-                </th>
-                <th>
-                    Fec. Fin
-                </th>
-                <th>
-                    <mat-icon style="background-color: transparent;" >delete</mat-icon>
-                </th>
-            </thead>
-            <tbody>
-                <tr *ngFor="let x of arrDp08acal" class="tr" [ngStyle]="{'border-color': x.color_asign}" >
-                    <td> {{x.anio}} </td>
-                    <td> {{x.peri}} </td>
-                    <td> {{x.sema}} </td>
-                    <td> {{x.finicio | date: 'd/M/yy'}} </td>
-                    <td> {{x.ffin | date: 'd/M/yy'}} </td>
-                    <td (click)="delDP08ACAL(x.anio, x.peri, x.sema)" style="color: orangered;" >
-                        <mat-icon>delete</mat-icon>
-                    </td>
-                </tr>
-            </tbody>
+      </mat-card>
+      <table class="tbitems1" style="margin: 40px 0px;" [class.carditemsanit]="show">
+        <tr class="tritems11">
+            <td class="tditems11">Color</td>
+            <td class="tditems11">Año</td>
+            <td class="tditems11">Semana</td>
+            <td class="tditems11" style="cursor: pointer;" (click)="orderType()">Fec. inicio</td>
+            <td class="tditems11"  style="cursor: pointer;" (click)="orderType()">Fec. Fin</td>
+            <td class="tditems11"></td>
+        </tr>
+        <tr class="tritems12"  *ngFor="let data of arrDp08acal; index as i">
+            <td class="tditems12"><div [ngStyle]="{'background-color': data.color_asign}" class="colormuestraitem"></div></td>
+            <td class="tditems12">{{ data.anio  }}</td>
+            <td class="tditems12">{{ data.sema }}</td>
+            <td class="tditems12">{{ data.finicio | date: 'd/M/yy'}}</td>
+            <td class="tditems12">{{ data.ffin | date: 'd/M/yy'}}</td>
+            <td class="tditems12" style="display: flex;flex-direction: row;">
+                <button (click)="delDP08ACAL(data.anio, data.peri, data.sema)" style="margin-top: 7px;" mat-icon-button class="btnicon" ><span class="iconst material-icons">clear</span></button>
+            </td>
+        </tr>
         </table>
-    </div>
-
+    <button [class.animatebtnfixed]="show" (click)="nextpage()" mat-fab class="itemnextpage" color="primary" aria-label="Example icon button with a delete icon"><mat-icon> warehouse</mat-icon></button>
 </div>

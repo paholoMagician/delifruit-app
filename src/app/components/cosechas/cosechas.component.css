@@ -1,22 +1,27 @@
 .contain{
     background-color: rgb(242, 241, 241);
     min-height: 100%;
-    width: 100%;
+    width: 100%; 
     margin: 0;
 }
 .subcontain{
     transition: all ease-in .4s;
     width: 100%;
     display: flex;
-    padding-top: 20px;
+    padding-top: 40px;
     justify-content: start;
     align-items: center;
     flex-direction: column;
+    opacity: 0;
+}
+.subcontainanit{
+    padding-top: 15px;
+    opacity: 1;
 }
 .cards{
     padding: 40px;
     margin: 20px;
-    width: 70%;
+    width: 90%;
 }
 .cardshor{
     padding: 25px;
@@ -50,7 +55,36 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
-
+.search{
+    margin-top: 20px;
+    width: 100%;
+}
+.inputsearch{
+    width: calc(100% - 15px);
+    margin-right: 10px;
+    margin-top: -3px;
+}
+.tdcant{
+    width: 60px;
+    height: 40px;
+    background-color: rgb(52, 83, 255);
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+.textcant1{
+    color: white;
+    font-size: 25px;
+    font-weight: 500;
+}
+.textcant2{
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
 .butons{
     margin: 20px 0px;
     width: 100%;
@@ -60,7 +94,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    background-color: #525252;
+    background-color: #333333;
 }
 .selects{
     margin-top: 10px;
@@ -137,4 +171,58 @@
     padding: 0px 20px;
     font-weight: 400;
     font-size: 15px;
+}
+.contbutons{
+    margin-top: 20px;
+    width: 100%;
+}
+.menuvert{
+    width: 100%;
+    height: 55px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    margin-top: -20;
+    background-color: #1a5ef3;
+    transition: all ease-in .2s;
+}
+.menuanimation{
+    margin-top: 0px;
+    opacity: 1;
+
+}
+.leftmenu{
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-left: 20px;
+    font-weight: 500;
+    color: white;
+}
+.rigthmenu{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 15px;
+}
+.rigtmenut{
+    font-size: 15px;
+    color: #f2f2f2;
+    margin-right: 5px;
+    margin-left: 20px;
+}
+.itemnextpage{
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #1a5ef3;
+    transform: scale(0.5);
+    transition: all ease-in .1s;
+    opacity: 0;
+}
+.animatebtnfixed{
+    transform: scale(1);
+    opacity: 1;
 }

@@ -22,8 +22,8 @@ export class CosechaService {
   gcosecha(top: number, order: string) {
     return this.http.get( this.apiURL + '/cosecha/getCosecha/' + top + '/' + order );
   }
-  getMaster(nomtag: string, properties: string) {  
-    return this.http.get( this.apiURL + '/control_alp_master_tabla/geMaster/' + nomtag + '/' + properties );
+  getMaster(nomtag: string, properties: string, order: string) {  
+    return this.http.get( this.apiURL + '/control_alp_master_tabla/geMaster/' + nomtag + '/' + properties + '/' + order );
   }
   scosecha( model: any [] ) {
     return this.http.post( this.apiURL + '/cosecha/saveCosecha', model )

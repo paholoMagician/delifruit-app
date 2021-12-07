@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import * as JsBarcode from 'jsbarcode';
+import { forkJoin, from, Observable } from 'rxjs';
 import * as qrcode from 'qrcode-generator';
 import { AlptablaService } from 'src/app/services/alptabla.service';
 import { AuditoriaService } from 'src/app/services/auditoria.service';
 import { ColoresService } from 'src/app/services/colores.service';
-import { CosechaService } from 'src/app/services/cosecha.service';
-import { DevolucionService } from 'src/app/services/devolucion.service';
 import { Dp08acalService } from 'src/app/services/dp08acal.service';
 import { TimeService } from 'src/app/services/time.service';
 import Swal from 'sweetalert2';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-codebar',
@@ -16,8 +17,37 @@ import Swal from 'sweetalert2';
   styleUrls: ['./create-codebar.component.css']
 })
 export class CreateCodebarComponent implements OnInit {
+  fonts: any[] = ["Arial", "Helvetica", "Courier New"];
+  alings: any[] = [{name: "Top", value: "flex-start"}, {name: "Center", value: "center"}, {name: "Bottom", value: "flex-end"}];
+  types: any[] = [{name: "Qr code", value: 0}, {name: "Code bar", value: 1}, {name: "Code bar 2", value: 2}];
   isEditable = false;
+  show = false;
+  show2 = false;
+  showprint = false
+  addqrcode = false;
+  btnaddanimat = false;
+  cardsettings = false;
+  btnsettings = false
+  icon:string = ""
+  Mtag = "";
+  Mhacien = "";
+  Manio = "";
+  Mcant = "";
+  codemastert = "";
   today = new Date();
+  settingsfont = this._formBuilder.group({
+    mwidth: [120, Validators.required],
+    mheigth: [50, Validators.required],
+    msize: [16, Validators.required],
+    mfont: ['arial', Validators.required],
+    mrotate: [-90, Validators.required],
+    marginl: [0],
+    margint: [0],
+    marginb: [0],
+    marginr: [0],
+    alings: [],
+    types: []
+  });
   year2 = this.today.getFullYear();
   firstFormGroup = this._formBuilder.group({
     semana: ['', Validators.required],
@@ -30,6 +60,17 @@ export class CreateCodebarComponent implements OnInit {
   threeFormGroup = this._formBuilder.group({
     cant: [0, Validators.required],
   });
+  toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
   public _perPage: number = 20;
   public p: any = 1;
 
@@ -50,8 +91,12 @@ export class CreateCodebarComponent implements OnInit {
 
   public sesHiystPrint: any;
   public _nPageCont:    any;
+  public user: any;
+  public title_header:any
 
-  constructor(  private _formBuilder: FormBuilder,
+  constructor(    private route:ActivatedRoute,
+    private router:Router,
+                private _formBuilder: FormBuilder,
                 public dt: TimeService,
                 public smas: ColoresService,
                 private gdp: Dp08acalService,
@@ -59,15 +104,35 @@ export class CreateCodebarComponent implements OnInit {
                 private audit: AuditoriaService, ) { }
 
   ngOnInit(): void {
+    this.icon = `${this.route.snapshot?.routeConfig?.path}`
+    var arrayitemsmenu:any = sessionStorage.getItem('items_menu'); 
+    var objetitems = JSON.parse(arrayitemsmenu);
+    for(var i = 0; i <= objetitems.length; i++){
+      if(objetitems[i]?.icon_module == this.icon){this.title_header = objetitems[i].name_module}
+    }
+    setTimeout(() => {
+      this.show = true
+    }, 60);
+    setTimeout(() => {
+      var desarollador:any = localStorage.getItem("desarrollador");
+      if(desarollador != null){
+        this.show2 = true
+      }
+    }, 150);
     this.secondFormGroup.controls["inputyear"].disable()
-    localStorage.setItem("apptransform", "270deg");
-    localStorage.setItem("appheight", "60px");
-    localStorage.setItem("appwidth", "60px");
-    localStorage.setItem("appwidth2", "200px");
-    localStorage.setItem("appfont", "arial");
-
+    localStorage.setItem("levelcode", "3");
+    localStorage.setItem("apptransform", "-90");
+    localStorage.setItem("appheight", "40");
+    localStorage.setItem("appwidth", "105");
+    localStorage.setItem("appsize", "14");
+    localStorage.setItem("appfont", "Arial");
+    localStorage.setItem("aling", "center");
+    localStorage.setItem("marginl", "-43");
+    localStorage.setItem("marginr", "0");
+    localStorage.setItem("margint", "-5");
+    localStorage.setItem("marginb", "75");
+    localStorage.setItem("types", "0");
     this.gDP08ACAL('asc');
-
 
     this.sesHiystPrint = localStorage.getItem('hystPrint');
     this._nPageCont = localStorage.getItem('hystPrint');
@@ -90,13 +155,10 @@ export class CreateCodebarComponent implements OnInit {
     this.getAudit(this.usx, '_');
 
     this.gDP08ACAL('ASC')
-
-    console.log('init')
     this.filter('','b')
 
     this.namHacienda = 'DELI_MASTER';
 
-    this.filter(this.namHacienda, 'a')
 
     // this.createQRO('ejemplo');
     this.ghead();
@@ -104,9 +166,50 @@ export class CreateCodebarComponent implements OnInit {
     this._hacienda = localStorage.getItem('codigo_hac_bcod');
     this._lote = localStorage.getItem('codigo_lot_bcod');
     this._secuencia = localStorage.getItem('');
-    this.bar_codec = localStorage.getItem('codigo_hac_bcod')?.trim()+'_'+this._lote+'_'+this.year+this._secuencia.padStart(4,'0');
+    this.bar_codec = localStorage.getItem('codigo_hac_bcod')?.trim()+'_'+this._lote+'_'+this.year+this._secuencia?.padStart(4,'0');
+    this.verificacion()
+    this.user = sessionStorage.getItem('User_Name'); 
   }
-
+  logout(){
+    sessionStorage.removeItem('Code_user');
+    sessionStorage.removeItem('User_Name');
+    sessionStorage.removeItem('Estado');
+    this.verificacion()
+  }
+  verificacion() {     
+    if (sessionStorage.getItem('User_Name') == '' || sessionStorage.getItem('User_Name') == null) {
+      this.router.navigate(['/login']);
+      console.log('/login')
+    } 
+  }
+  showaddqrcode(){
+    this.addqrcode = !this.addqrcode
+    this.btnaddanimat = !this.btnaddanimat
+  }
+  settingsimp(){
+    this.cardsettings = !this.cardsettings
+    this.btnsettings = !this.btnsettings
+  }
+  settingsprint(){
+      if(this.settingsfont.valid){
+        localStorage.setItem("apptransform", this.settingsfont.get("mrotate")?.value);
+        localStorage.setItem("appheight", this.settingsfont.get("mheigth")?.value);
+        localStorage.setItem("appwidth", this.settingsfont.get("mwidth")?.value);
+        localStorage.setItem("appsize", this.settingsfont.get("msize")?.value);
+        localStorage.setItem("appfont", this.settingsfont.get("mfont")?.value);
+        localStorage.setItem("marginl", this.settingsfont.get("marginl")?.value);
+        localStorage.setItem("margint", this.settingsfont.get("margint")?.value);
+        localStorage.setItem("marginb", this.settingsfont.get("marginb")?.value);
+        localStorage.setItem("marginr", this.settingsfont.get("marginr")?.value);
+      }
+      if(this.settingsfont.get("alings")?.value != null){
+        console.log(localStorage.getItem("aling"))
+        localStorage.setItem("aling", this.settingsfont.get("alings")?.value);
+      }
+      if(this.settingsfont.get("types")?.value != null){
+        localStorage.setItem("types", this.settingsfont.get("types")?.value);
+      }
+  }
   shist(a: any) {
     localStorage.setItem('hystPrint', a);
     this.sesHiystPrint = localStorage.getItem('hystPrint');
@@ -124,7 +227,6 @@ export class CreateCodebarComponent implements OnInit {
   getAudit( a: string, b: string ) {
     this.audit.getAuditPrint(a, b).subscribe( y => {
       this.ArrAudit = y;
-      console.log(this.ArrAudit);
     })
   }
 
@@ -153,7 +255,18 @@ export class CreateCodebarComponent implements OnInit {
 
     this.audit.getAuditPrint( '_void_', a ).subscribe( m => {
       this.arrAuditFilter = m;
-      console.log(this.arrAuditFilter);
+      var desarollador:any = localStorage.getItem("desarrollador");
+      if(desarollador != null){
+        var btnprint = <HTMLButtonElement> document.getElementById(`btnprint`);
+        var btnsettings = <HTMLButtonElement> document.getElementById(`btnsettings`);
+        btnprint.style.bottom = "110px"
+        btnsettings.style.bottom = "182px"
+        setTimeout(() => {
+          this.showprint = true
+        }, 200);
+      }else{
+        this.showprint = true
+      }
     })
 
   }
@@ -194,7 +307,23 @@ export class CreateCodebarComponent implements OnInit {
   ghead() {
     this.data_head = localStorage.getItem('name_module');
   }
-
+  deleteitem(codex:string,hacienda_tag:string){
+    forkJoin(
+      this.gdp.deleteqrlote("hacienda_tag", hacienda_tag),
+      this.gdp.deleteqrlote("codec_lotes", codex)
+    ).subscribe((x)=>{
+        this.getAudit(this.usx, '_');
+        this.toast.fire({
+          icon: 'success',
+          title: 'Borrado con exito'
+        })
+    },err=>{
+      this.toast.fire({
+        icon: 'error',
+        title: 'Error al eliminar el elemento'
+      })
+    })
+  }
   dataPersist( nameStorage: string, values: string ) {
     let x = localStorage.setItem( `${nameStorage}`, `${values}` )
   }
@@ -203,9 +332,6 @@ export class CreateCodebarComponent implements OnInit {
   gDP08ACAL(order: string) {
     this.gdp.getDp08acal(order).subscribe( db => {
       this.arrDp08acal = db;
-
-      console.log ( 'this.arrDp08acal');
-      console.log(this.arrDp08acal);
     })
   }
 
@@ -224,22 +350,23 @@ export class CreateCodebarComponent implements OnInit {
 
     // opcion a busca todos los lotes por haciendas
     if( opt == 'a' ) {
-      console.log('Buscando lotes');
-      this.alp.getFilterHac(data, opt).subscribe( y => {
+      this.arrFilterGet = []
+      this.alp.getFilterHac(data, "a").subscribe( y => {
         this.arrFilterGet = y;
-        console.log(this.arrFilterGet);
-        this.titleModal = this.arrFilterGet[0].db_msj;
+        this.titleModal = this.arrFilterGet[0]?.db_msj;
+      }, (e)=>{
+        console.log(e)
+
       })
     }
 
     // opcion B busca todas las haciendas creadas en el ALPTABLA
     else if( opt == 'b' ) {
-      console.log('Buscando haciendas');
       this.alp.getFilterHac('HCIE_GR', opt).subscribe( w =>
       {
+        console.log(w)
         this.arrHaciendas = w;
         this.titleModal   = this.arrHaciendas[0].db_msj;
-        console.log(this.arrHaciendas);
       })
     }
 
@@ -253,21 +380,32 @@ export class CreateCodebarComponent implements OnInit {
       })
     }
   }
-
-  getDataTables( nameStore: string, a: string, opt: number, nhacienda: string ) {
-
+  returncodex(id:boolean){
+    if(id){
+      this.codemastert = this.Mtag + "_" + this.Mhacien + "_" + this.year;
+    }else{
+      this.codemastert = this.Mtag;
+    }
+  }
+  getDataTables( nameStore: string, a: string, opt: number, nhacienda: string, name?:string ) {
     switch( opt ) {
 
       case 1:
+        var data = name || ""
+        this.Mtag = a
+        this.codemastert = this.Mtag;
         this._hacienda = a;
-        console.log(nhacienda)
         this.nhacienda(nhacienda);
+        this.filter(data, "a")
         localStorage.setItem(`${nameStore}`, `${this._hacienda}`);
-        const xa: any = localStorage.getItem('codigo_hac_bcod')?.trim()+'_'+this._lote.trim()+'_'+this.year+this._secuencia.toString().padStart(4,'0');
+        console.log(localStorage.getItem('codigo_hac_bcod')?.trim()+'_'+this._lote+'_'+this.year+this._secuencia.toString().padStart(4,'0'))
+        const xa: any = localStorage.getItem('codigo_hac_bcod')?.trim()+'_'+this._lote+'_'+this.year+this._secuencia.toString().padStart(4,'0');
         this.bar_codec = xa;
         break;
 
       case 2:
+        this.Mhacien = a
+        this.codemastert = this.Mtag + "_" + this.Mhacien + "_" + this.year;
         this._lote = a;
         localStorage.setItem(`${nameStore}`, `${this._lote}`);
         const xb: any = localStorage.getItem('codigo_hac_bcod')?.trim()+'_'+this._lote.trim()+'_'+this.year+this._secuencia.toString().padStart(4,'0');
@@ -275,6 +413,8 @@ export class CreateCodebarComponent implements OnInit {
         break;
 
       case 3:
+        this.Mcant = a
+        this.codemastert = this.Mtag + "_" + this.Mhacien + "_" + this.year + "_" + this.Mcant.toString().padStart(4,'0');
         this._secuencia = Number(a);
         localStorage.setItem(`${nameStore}`, `${this._secuencia}`);
         const xc: any = localStorage.getItem('codigo_hac_bcod')?.trim()+'_'+this._lote.trim()+'_'+this.year+this._secuencia.toString().padStart(4,'0');
@@ -287,7 +427,11 @@ export class CreateCodebarComponent implements OnInit {
 
   public arrCode: any = [];
   generateBarcode(numberCode: number) {
-
+    this.toast.fire({
+      icon: 'success',
+      title: 'Generadas con exito'
+    })
+    this.codemastert = ""
     this.dt.timeSetformatSQL( 'receipt_long', 'fin' );
 
     //Guardar Maestro Auditoria
@@ -342,39 +486,67 @@ export class CreateCodebarComponent implements OnInit {
     }
 
   }
-
   createQRO(data: string, id: string, color: string) {
-
-    const xx  = <HTMLDivElement> document.getElementById(`${id}`);
-    const qr  = qrcode(0, 'M');
-    const url = `${data}`;
-    var transform:any = localStorage.getItem("apptransform")
-    var height:any = localStorage.getItem("appheight")
-    var width:any = localStorage.getItem("appwidth")
-    var width2:any = localStorage.getItem("appwidth2")
+    var state:any = localStorage.getItem("levelcode");
+    var types:any = localStorage.getItem("types");
+    var transform:any = localStorage.getItem("apptransform") + "deg";
+    var height:any = localStorage.getItem("appheight") + "px";
+    var width:any = localStorage.getItem("appwidth") + "px";
+    var size:any = localStorage.getItem("appsize") + "px";
     var appfont:any = localStorage.getItem("appfont")
-
-    xx.style.width      = width;
+    var aling:any = localStorage.getItem("aling");
+    var marginl:any = localStorage.getItem("marginl")+ "px";
+    var marginr:any = localStorage.getItem("marginr")+ "px";
+    var margint:any = localStorage.getItem("margint")+ "px";
+    var marginb:any = localStorage.getItem("marginb")+ "px";
+    const xx  = <HTMLDivElement> document.getElementById(`${id}`);
+    var inertt = ""
+    var flexDirection = "";
+    var justifyContent = "";
+    var qr:any;
+    if(Number(state) == 1){
+      qr = qrcode(0, 'L');
+    }else if(Number(state) == 2){
+      qr = qrcode(0, 'M');
+    }else if(Number(state) == 3){
+      qr = qrcode(0, 'Q');
+    }else if(Number(state) == 4){
+      qr = qrcode(0, 'H');
+    }
+    if(Number(types) == 0){
+      const url = `${data}`;
+      qr.addData(url);
+      qr.make();
+      inertt =  `${qr.createImgTag(1.4, 1)}<div style="font-size: ${size};font-family: ${appfont};"> ${color}</div>`
+      flexDirection = "row";
+      justifyContent = "space-around";
+    }else if(Number(types) == 1){
+      inertt =  `<img id="A${id}"/><div style="font-size: ${size};font-family: ${appfont};">${color}</div>`
+      flexDirection = "column-reverse";
+      justifyContent = "center";
+    }else if(Number(types) == 2){
+      inertt =  `<img id="A${id}"/>`
+      flexDirection = "column-reverse";
+      justifyContent = "center";
+    }
+    xx.style.marginLeft = marginl;
+    xx.style.marginRight = marginr;
+    xx.style.marginTop = margint;
+    xx.style.marginBottom = marginb;
+    xx.style.padding  = "0px";
+    xx.style.minWidth      = width;
+    xx.style.maxWidth = width;
     xx.style.height     = height;
-    // xx.style.transformOrigin= '0 0'; 
     xx.style.transform  = 'rotate('+ transform +')';
-    xx.style.display    = 'flex !important';
-   //xx.style.flexDirection    = 'column';
-    xx.style.fontFamily = appfont;
-    // xx.style.marginLeft = '25px';
-
-    qr.addData(url);
-    qr.make();
-
-    xx.innerHTML =  `<div style=" display: flex; flex-direction: row; " >
-                      <div>
-                       ${qr.createImgTag(1.4, 1)}
-                     </div>
-                     <div style='width:${width2};'> 
-                       COL.: ${color}
-                     </div> 
-                      </div> `;
-
+    xx.style.display    = 'flex';
+    xx.style.flexDirection = flexDirection;
+    xx.style.justifyContent = justifyContent;
+    xx.style.alignItems = aling;
+    xx.innerHTML =  inertt;
+    if(Number(types) == 1 || Number(types) == 2){
+      const imgc  = <HTMLImageElement> document.getElementById(`A${id}`);
+      JsBarcode(imgc, data);
+    }
   }
 
 

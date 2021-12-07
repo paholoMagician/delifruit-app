@@ -77,9 +77,13 @@ export class AlptablaService {
 
   }
   
-  getMaster(nomtag: string, properties: string) {  
-    return this.http.get( this.apiURL + '/control_alp_master_tabla/geMaster/' + nomtag + '/' + properties );
+  getMaster(nomtag: string, properties: string, order:string) {  
+    return this.http.get( this.apiURL + '/control_alp_master_tabla/geMaster/' + nomtag + '/' + properties + '/' + order);
   }
+  getMaster2(master: string) {  
+    return this.http.get( this.apiURL + '/control_alp_master_tabla/getLotesByHac/' + master);
+  }
+
 
   //control_alp_master_tabla/delMasterData/PRUE_MASTER/001
   delLotes(master: string, codec: string) {
@@ -95,5 +99,4 @@ export class AlptablaService {
     // return this.http.get('https://alp-cloud.com:8430/api/control_alp_master_tabla/FilterDataModuleGBarCode/de/c');
     return this.http.get( this.apiURL + '/control_alp_master_tabla/FilterDataModuleGBarCode/' + data + '/'  + opt);
   }
-
 }

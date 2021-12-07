@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { InformesComponent } from './components/informes/informes.component';
 import { CosechasComponent } from './components/cosechas/cosechas.component';
 import { RecusadoComponent, recusadosFragment, recusadosOptions } from './components/recusado/recusado.component';
-import { DevolucionComponent } from './components/devolucion/devolucion.component';
+import { DevolucionComponent, devolucionFragment } from './components/devolucion/devolucion.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuditoriaComponent } from './components/auditoria/auditoria.component';
 import { MotRecusadoComponent } from './components/mot-recusado/mot-recusado.component';
@@ -61,7 +61,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { CalbanComponent } from './components/calban/calban.component';
+import { CalbanComponent, popupitemcolors } from './components/calban/calban.component';
 import { HeaderComponent } from './components/header/header.component';
 import { VersionamientoComponent } from './components/versionamiento/versionamiento.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -77,9 +77,11 @@ import { NgxPaginationModule } from 'ngx-pagination';
     DashboardComponent,
     AuditoriaComponent,
     MotRecusadoComponent,
+    devolucionFragment,
     CreateCodebarComponent,
     ColoresComponent,
     HaciendasComponent,
+    popupitemcolors,
     LoginComponent,
     CalbanComponent,
     HeaderComponent,

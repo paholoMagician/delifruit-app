@@ -15,7 +15,7 @@ export class DevolucionService {
   saveSobDevs( model: any [] ) {
     return this.http.post( this.apiURL + '/c_devsob/SaveDevSob', model );
   }
-
+  //hISTORIAL
   getSobDevs( token: string, codLot: string ) {
     return this.http.get( this.apiURL + '/c_devsob/getC_DEVSOB/' + token + '/' + codLot );
   }
@@ -23,8 +23,13 @@ export class DevolucionService {
   putSobDevs( lotePK: string, model: any [] ) {
     return this.http.put( this.apiURL + '/c_devsob/puttransprod/' + lotePK, model );
   }
+  //lOTES
   getLoteUnit( codec_lotes_master: string, codec_lotes: string ) {
     return this.http.get( this.apiURL + '/AuditPrint/GetLotes/' + codec_lotes_master + '/' + codec_lotes )
+  }
+  deletehistunit(token:string, codec_master:string){
+    console.log(this.apiURL + '/c_devsob/delC_DEVSOB/' + token + '/' + codec_master)
+    return this.http.get( this.apiURL + '/c_devsob/delC_DEVSOB/' + token + '/' + codec_master )
   }
 
 }

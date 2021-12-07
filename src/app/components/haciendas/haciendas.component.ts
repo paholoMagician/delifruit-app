@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlptablaService } from 'src/app/services/alptabla.service';
 
 @Component({
@@ -8,9 +9,9 @@ import { AlptablaService } from 'src/app/services/alptabla.service';
 })
 export class HaciendasComponent implements OnInit {
   public data_head: any;
-
+  public icon:any = ""
   panelOpenState = false;
-
+  public user: any;
   public _cod_hacienda:     string = '';
   public _name_hacienda:    string = '';
   public _nomtag_hacienda:  any;
@@ -25,26 +26,50 @@ export class HaciendasComponent implements OnInit {
   //make codec secuences
   public codecSecuence: any = '000';
 
-  public _total_hectareaje: number = 0.00;
+  public _total_hectareaje: string = "0.00";
 
   public showHac: boolean = false;
 
   public _val_edit: any;
+  public title_header:any
 
-  constructor( public chcien: AlptablaService ) { }
-
+  constructor(public router:ActivatedRoute, public route:Router,public chcien: AlptablaService ) { }
+  show = false
   ngOnInit(): void {
-
-    this.gMaster('HCIE_GR',     'grupo',  1);
-    this.gMaster('HCIE_GR',     'sgrupo', 2);
+    this.user = sessionStorage.getItem('User_Name'); 
+    setTimeout(() => {
+      this.show = true
+  }, 60);
+    this.gMaster('HCIE_GR',     'grupo',  1, "ASC", "");
+    this.gMaster('HCIE_GR',     'sgrupo', 2, "ASC", "");
     //this.gMaster('DELI_MASTER', 'master', 3);
 
     this.ejec_hacienda  = localStorage.getItem('name_hacienda' );
     this.codec_hacienda = localStorage.getItem('codec_hacienda');
     this._nomtag_hacienda = localStorage.getItem('nom_tag');
-
+    this.icon = this.router.snapshot.routeConfig?.path
     this.ghead();
-
+  this.verificacion()
+  this.icon = `${this.router.snapshot?.routeConfig?.path}`
+  var arrayitemsmenu:any = sessionStorage.getItem('items_menu'); 
+  var objetitems = JSON.parse(arrayitemsmenu);
+  for(var i = 0; i <= objetitems.length; i++){
+    if(objetitems[i]?.icon_module == this.icon){this.title_header = objetitems[i].name_module}
+  }
+  }
+  nextpage(){
+    this.route.navigate(["receipt_long"])
+  }
+  logout(){
+    sessionStorage.removeItem('Code_user');
+    sessionStorage.removeItem('User_Name');
+    sessionStorage.removeItem('Estado');
+    this.verificacion()
+  }
+  verificacion() {     
+    if (sessionStorage.getItem('User_Name') == '' || sessionStorage.getItem('User_Name') == null) {
+      this.route.navigate(['/login']);
+    } 
   }
 
   public count: number = 0;
@@ -54,7 +79,7 @@ export class HaciendasComponent implements OnInit {
     .subscribe( y => {
       console.log('OK');
       console.log(y);
-      this.gMaster('HCIE_GR', 'sgrupo', 2);
+      this.gMaster('HCIE_GR', 'sgrupo', 2, "ASC", "");
 
       this.codecSecuence =  Number(this.codecSecuence);
 
@@ -66,7 +91,7 @@ export class HaciendasComponent implements OnInit {
 
   }
 
-  sLote ( codecSecuence: string, nombre: string, grupo: string, hectareaje: number) {
+  sLote ( codecSecuence: string, nombre: string, grupo: string, hectareaje: number, ejec_hacienda:string) {
 
     // console.log( codecSecuence, nombre, grupo, hectareaje);
     const x: any = localStorage.getItem('codec_hacienda');
@@ -75,16 +100,10 @@ export class HaciendasComponent implements OnInit {
     this.codec_hacienda = Number(this._cod_hacienda) + 1;
     console.log(this.codec_hacienda);
     // codecSecuence.padStart(3,'0');
-    
+     
     const xx = codecSecuence.toString().padStart(3,'0')
-    
-    this.chcien.saveDetailMaster(x.trim(), xx, nombre, grupo, hectareaje).subscribe( z => {
-    
-      console.log('OK');
-      console.log(z);
-    
+    this.chcien.saveDetailMaster(ejec_hacienda.trim(), xx, nombre, grupo, hectareaje).subscribe( z => {
     })
-
     location.reload();
   
   }
@@ -107,52 +126,44 @@ export class HaciendasComponent implements OnInit {
   public ArrMaster: any = [];
   public ArrHaciendas: any = [];
   public ArrLotes: any = [];
-
-  gMaster(nomtag: string, properties: string, opt: number) {
-
+  // "DESC"
+  // "ASC"
+  gMaster(nomtag: string, properties: string, opt: number, order:string, master:string) {
     if( opt == 1 ) {
 
-      this.chcien.getMaster(nomtag, properties).subscribe( MASTER => {
+      this.chcien.getMaster(nomtag, properties, order).subscribe( MASTER => {
         this.ArrMaster = MASTER;
         // console.log(this.ArrMaster);
-      })
+      }) 
 
     }
-
     else if ( opt == 2 ) {
-
-      this.chcien.getMaster(nomtag, properties).subscribe( HACIE => {
+      this.chcien.getMaster(nomtag, properties, order).subscribe( HACIE => {
         this.ArrHaciendas = HACIE;
-        //console.log(this.ArrHaciendas);
-      })
-
-    }
-    
-    else if ( opt == 3 ) {
-
-      this.chcien.getMaster(nomtag, properties).subscribe( LOTES => {
-        this.ArrLotes = LOTES;
-        // console.log(this.ArrLotes);
-
-        let arr = [];
-
-        for( let x = 0; x <= this.ArrLotes.length; x++ ) {
-
-          // console.log(this.ArrLotes[x].valor);
-          let xy = this.ArrLotes[x].valor;
-          arr.push(xy);
-
-          let xx = (previousValue: number, currentValue: number) => previousValue + currentValue;
-          this._total_hectareaje = arr.reduce(xx).toFixed(2);
-
+        console.log(HACIE)
+        for(var i = 1; i <= this.ArrHaciendas.length; i++){
+          this.loadlotes(this.ArrHaciendas[i - 1].nombre, i - 1 )
         }
-
-        // console.log(this._total_hectareaje);
-
-      })
+      }) 
 
     }
+  }
+  loadlotes(master:string, index:number){
+    this.chcien.getMaster2(master).subscribe( LOTES => {
+      var ArrLotes:any = LOTES;
+      if(ArrLotes.length){
+        var suma = 0
+        this.ArrHaciendas[index].objeto = LOTES
+        for(let i = 1; i <= ArrLotes.length; i++){
+          suma = suma + Number(ArrLotes[i - 1].valor)
+        }
+        this.ArrHaciendas[index].total = suma.toFixed(2)
+        var suma = 0
+      }
+    },(err)=>{
+      console.log(err)
 
+    })
   }
 
   dataPersist(nameStore:string, a: string, nameStoreB: string, b: string, nameStoreC: string, c: string) {
@@ -168,16 +179,11 @@ export class HaciendasComponent implements OnInit {
     this._cod_lote = Number(b) + 1;
   }
 
-  del(b: string) {
-    
-    let a: any = localStorage.getItem('codec_hacienda');
-    //let b: any = localStorage.getItem('nom_tag');
-    
-    console.log(a)
-    console.log(b.slice(1,7).trim())
-
-    this.chcien.delLotes(a.trim(), b.trim()).subscribe( del => {
-      this.gMaster('HCIE_GR', 'sgrupo', 2);
+  del(a:string, b: string) {
+    var name = b.trim().toLowerCase()
+    var code = a.trim().toLowerCase()
+    this.chcien.delLotes(name, code).subscribe( del => {
+      this.gMaster('HCIE_GR', 'sgrupo', 2, "", "");
       location.reload();
     })
 
@@ -194,7 +200,7 @@ export class HaciendasComponent implements OnInit {
     this.chcien.updtaeNamesHaciendas(aa, m).subscribe( update => {
       
       console.log ('UPDATE EXITOSO');
-      this.gMaster('HCIE_GR', 'sgrupo', 2);
+      this.gMaster('HCIE_GR', 'sgrupo', 2, "", "");
 
     })
 

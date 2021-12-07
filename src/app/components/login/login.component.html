@@ -1,38 +1,27 @@
-<div id="formActionA" class="container animated fadeIn slow">
-    <div class="logo">
-       <img src="../../assets/logotipo/part1_logo.png" style="width: auto; height: 150px;">
-       <img src="../../assets/logotipo/part2_logo.png" style="width: auto; height: 150px;">
-   </div>
-
-   <div id="formularioLogIn">
-       <div id="source2"></div>
-       <form id="formInt1">
-           
-           <div class="labelInputs mt-2 mb-2">
-               <label for="usuario" style="color: white;" >
-                   <span class="icon-adult"></span>Usuario:
-               </label>
-               <input type="text" id="usuario" class="inputs" placeholder="username" requerid [(ngModel)]="usuario" name="usuario">
-           </div>
-
-           <div class="labelInputs mt-2 mb-2">
-               <label for="password" style="color: white;"><span class="icon-lock-open-1"></span>Contraseña:</label>
-               <input [type]="passwordType" id="pass" class="inputs" placeholder="*****"
-               requerid [(ngModel)]="password" name="password">
-               <div class="showPass">
-                   <span class=" icon-eye-3 mt-2" id="eyeA" style="cursor:pointer;"
-                   (click)="passwordHidShow()"></span>
-                   <p class="note" id="sowerCasePass1"></p>
-               </div>
-           </div>
-
-           <button type="submit" value="Iniciar Sesión"
-                   id="loginButton"
-                   class="btn btn-primary mt-3 mb-3"
-                   (click)="logeo(usuario, password)">
-             <span class="icon-ok"></span> Ingresar
-           </button>
-
-       </form>
-   </div>
+<div class="cont">
+    <div class="formdiv">
+        <div class="logo">
+            <img src="../../assets/logotipo/part1_logo.png" style="width: auto; height: 100px;">
+            <img src="../../assets/logotipo/part2_logo.png" style="width: auto; height: 100px;">
+        </div>
+        <div class="form">
+            <div class="title">Syscompsa</div>
+            <form [formGroup]="formlogin" style="width: 100%;">
+                <mat-form-field class="inputsh">
+                    <mat-label style="color: rgb(208, 208, 208);">Usuario</mat-label>
+                    <input type="text" class="textinput" matInput formControlName="WebUsu" placeholder="Administrador">
+                    <mat-error *ngIf="formlogin.controls['WebUsu'].hasError('required')">El usuario es requerida </mat-error>
+                </mat-form-field>
+                <mat-form-field class="inputsh">
+                    <mat-label style="color: rgb(208, 208, 208);">Contraseña</mat-label>
+                    <input [type]="hide ? 'password' : 'text'" class="textinput" (keyup.enter)="logeo()" matInput formControlName="WebPass" placeholder="123456">
+                    <mat-error *ngIf="formlogin.controls['WebPass'].hasError('required')">La contraseña es requerida </mat-error>
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                      </button>
+                </mat-form-field>
+                <button mat-flat-button class="btnlogin" (click)="logeo()">Ingresar</button>
+            </form>
+        </div>
+    </div>
 </div>

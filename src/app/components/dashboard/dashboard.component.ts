@@ -19,20 +19,41 @@ export class DashboardComponent implements OnInit {
 
     public modsArr: any = [];
     public user: any;
-
+    statemenu = true
   ngOnInit() {
     this.gMods();    
-    this.user = sessionStorage.getItem('User_Name');        
+    this.user = sessionStorage.getItem('User_Name');    
+    this.verificacion()    
   }
-
+  logout(){
+    sessionStorage.removeItem('Code_user');
+    sessionStorage.removeItem('User_Name');
+    sessionStorage.removeItem('Estado');
+    this.verificacion()
+  }
+  verificacion() {     
+    if (sessionStorage.getItem('User_Name') == '' || sessionStorage.getItem('User_Name') == null) {
+      this.router.navigate(['/login']);
+      console.log('/login')
+    } 
+  }
+  changenewtab(){
+    if(this.statemenu){
+      this.statemenu = false
+    }else{
+      this.statemenu = true
+    }
+  }
   public count: number = 0;
 
   gMods() {
     this.mods.getModulesGeneral().subscribe( m => {
+      console.log(m)
+      sessionStorage.setItem('items_menu', JSON.stringify(m)); 
       this.modsArr = m;
       for( let i = 0; i<=this.modsArr.length; i++ )
       {
-        this.an.objectAnim( i, this.modsArr[i].id, 'enteranim ease 1s 1', 100 );
+        this.an.objectAnim( i, this.modsArr[i].id, 'enteranim ease .5s 1', 100 );
       }
     })
   }
